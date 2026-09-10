@@ -1,0 +1,70 @@
+name: Mise à jour du compteur Discord
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Récupérer les fichiers
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Récupérer le nombre de membres Discord
+        run: python update.py
+
+      - name: Garder le dépôt actif
+        run: |
+          git config user.name "discord-counter-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add last-update.txt
+          git diff --cached --quiet || git commit -m "Mise à jour automatique du compteur Discord"
+          git push
+
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Préparer le site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: "_site"
+
+  deploy:
+
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Publier le site
+        id: deployment
+        uses: actions/deploy-pages@v4
