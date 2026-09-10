@@ -9,7 +9,7 @@ import yt_dlp
 
 
 # =========================================================
-# LIENS LEGODINGO13
+# LIENS
 # =========================================================
 
 DISCORD_INVITE = "ujHH2bNzhn"
@@ -20,7 +20,6 @@ YOUTUBE_VIDEOS_URL = "https://www.youtube.com/@Legodingo13/videos"
 FOE_URL = "https://fr0.forgeofempires.com/page/"
 GUNS_URL = "https://guns.lol/legodingo13"
 
-# Nous nous occuperons de Google Search Console plus tard.
 GOOGLE_META = """<!-- Google Search Console -->"""
 
 
@@ -41,12 +40,7 @@ def read_previous_youtube_count():
         return None
 
     try:
-
-        with open(
-            "last-update.txt",
-            "r",
-            encoding="utf-8"
-        ) as f:
+        with open("last-update.txt", "r", encoding="utf-8") as f:
 
             for line in f:
 
@@ -71,9 +65,7 @@ def find_follower_count(data):
 
     if isinstance(data, dict):
 
-        count = data.get(
-            "channel_follower_count"
-        )
+        count = data.get("channel_follower_count")
 
         if count is not None:
             return count
@@ -84,9 +76,7 @@ def find_follower_count(data):
 
             for entry in entries:
 
-                result = find_follower_count(
-                    entry
-                )
+                result = find_follower_count(entry)
 
                 if result is not None:
                     return result
@@ -95,9 +85,7 @@ def find_follower_count(data):
 
         for item in data:
 
-            result = find_follower_count(
-                item
-            )
+            result = find_follower_count(item)
 
             if result is not None:
                 return result
@@ -115,18 +103,14 @@ def get_first_video_url():
         "playlist_items": "1",
     }
 
-    with yt_dlp.YoutubeDL(
-        options
-    ) as ydl:
+    with yt_dlp.YoutubeDL(options) as ydl:
 
         info = ydl.extract_info(
             YOUTUBE_VIDEOS_URL,
             download=False
         )
 
-    entries = info.get(
-        "entries"
-    ) or []
+    entries = info.get("entries") or []
 
     if not entries:
         return None
@@ -154,42 +138,27 @@ def get_first_video_url():
 
 def get_youtube_subscribers():
 
-    previous_count = (
-        read_previous_youtube_count()
-    )
-
-    # -----------------------------------------------------
-    # MÉTHODE 1 :
-    # lecture directe de la chaîne YouTube
-    # -----------------------------------------------------
+    previous_count = read_previous_youtube_count()
 
     options = {
         "quiet": True,
         "no_warnings": True,
         "skip_download": True,
-        "playlist_items": "0,0",
     }
 
     try:
 
-        with yt_dlp.YoutubeDL(
-            options
-        ) as ydl:
+        with yt_dlp.YoutubeDL(options) as ydl:
 
             info = ydl.extract_info(
                 YOUTUBE_URL,
                 download=False
             )
 
-        count = find_follower_count(
-            info
-        )
+        count = find_follower_count(info)
 
         if count is not None:
-
-            return format_number(
-                count
-            )
+            return format_number(count)
 
     except Exception as error:
 
@@ -199,16 +168,9 @@ def get_youtube_subscribers():
         )
 
 
-    # -----------------------------------------------------
-    # MÉTHODE 2 :
-    # si nécessaire, lecture via une vidéo publique
-    # -----------------------------------------------------
-
     try:
 
-        video_url = (
-            get_first_video_url()
-        )
+        video_url = get_first_video_url()
 
         if video_url:
 
@@ -219,28 +181,17 @@ def get_youtube_subscribers():
                 "noplaylist": True,
             }
 
-            with yt_dlp.YoutubeDL(
-                video_options
-            ) as ydl:
+            with yt_dlp.YoutubeDL(video_options) as ydl:
 
-                video_info = (
-                    ydl.extract_info(
-                        video_url,
-                        download=False
-                    )
+                video_info = ydl.extract_info(
+                    video_url,
+                    download=False
                 )
 
-            count = (
-                find_follower_count(
-                    video_info
-                )
-            )
+            count = find_follower_count(video_info)
 
             if count is not None:
-
-                return format_number(
-                    count
-                )
+                return format_number(count)
 
     except Exception as error:
 
@@ -250,11 +201,6 @@ def get_youtube_subscribers():
         )
 
 
-    # -----------------------------------------------------
-    # MÉTHODE DE SECOURS :
-    # garder le dernier compteur connu
-    # -----------------------------------------------------
-
     if previous_count:
         return previous_count
 
@@ -262,7 +208,7 @@ def get_youtube_subscribers():
 
 
 # =========================================================
-# RÉCUPÉRATION DES STATISTIQUES DISCORD
+# STATISTIQUES DISCORD
 # =========================================================
 
 discord_url = (
@@ -284,16 +230,11 @@ with urllib.request.urlopen(
 ) as response:
 
     discord_data = json.loads(
-        response.read().decode(
-            "utf-8"
-        )
+        response.read().decode("utf-8")
     )
 
 
-guild = discord_data.get(
-    "guild",
-    {}
-)
+guild = discord_data.get("guild", {})
 
 guild_name = html.escape(
     guild.get(
@@ -318,28 +259,22 @@ online_count = format_number(
 
 
 # =========================================================
-# RÉCUPÉRATION DU NOMBRE D'ABONNÉS YOUTUBE
+# YOUTUBE
 # =========================================================
 
-youtube_subscribers = (
-    get_youtube_subscribers()
-)
+youtube_subscribers = get_youtube_subscribers()
 
 if youtube_subscribers == "indisponible":
 
-    youtube_display = (
-        "Compteur temporairement indisponible"
-    )
+    youtube_display = "Compteur temporairement indisponible"
 
 else:
 
-    youtube_display = (
-        f"{youtube_subscribers} abonnés"
-    )
+    youtube_display = f"{youtube_subscribers} abonnés"
 
 
 # =========================================================
-# DATE DE MISE À JOUR
+# DATE
 # =========================================================
 
 updated = datetime.now(
@@ -350,7 +285,7 @@ updated = datetime.now(
 
 
 # =========================================================
-# CRÉATION DU DOSSIER DU SITE
+# CRÉATION DU SITE
 # =========================================================
 
 os.makedirs(
@@ -358,10 +293,6 @@ os.makedirs(
     exist_ok=True
 )
 
-
-# =========================================================
-# PAGE INTERNET
-# =========================================================
 
 page = f"""<!DOCTYPE html>
 
@@ -382,7 +313,7 @@ Legodingo13 - Discord, YouTube et Forge of Empires
 
 <meta
     name="description"
-    content="Legodingo13 : serveur Discord francophone Forge of Empires avec {member_count} membres, chaîne YouTube Legodingo13 avec {youtube_display}, liens Forge of Empires et guns.lol."
+    content="Legodingo13 : serveur Discord francophone Forge of Empires avec {member_count} membres, chaîne YouTube Legodingo13 avec {youtube_display}."
 >
 
 <meta
@@ -395,6 +326,55 @@ Legodingo13 - Discord, YouTube et Forge of Empires
 
 <style>
 
+
+/* =========================================================
+   CURSEURS PERSONNALISÉS
+   ========================================================= */
+
+/*
+   Curseur normal partout sur la page
+*/
+
+html,
+body {{
+
+    cursor:
+        url("cursor_default.cur"),
+        auto;
+}}
+
+
+/*
+   Les éléments à l'intérieur de la page
+   conservent le curseur normal
+*/
+
+body * {{
+
+    cursor:
+        inherit;
+}}
+
+
+/*
+   Curseur avec le bout vert
+   pour tous les éléments cliquables
+*/
+
+a,
+a *,
+button,
+button * {{
+
+    cursor:
+        url("cursor_hover.cur"),
+        pointer !important;
+}}
+
+
+/* =========================================================
+   GÉNÉRAL
+   ========================================================= */
 
 * {{
     box-sizing: border-box;
@@ -444,11 +424,13 @@ body {{
 .page {{
 
     width: 100%;
-
-    max-width:
-        1050px;
+    max-width: 1050px;
 }}
 
+
+/* =========================================================
+   CARTE PRINCIPALE
+   ========================================================= */
 
 .card {{
 
@@ -488,8 +470,7 @@ body {{
 
     content: "";
 
-    position:
-        absolute;
+    position: absolute;
 
     top: 0;
     left: 10%;
@@ -507,10 +488,13 @@ body {{
 }}
 
 
+/* =========================================================
+   EN-TÊTE
+   ========================================================= */
+
 .header {{
 
-    text-align:
-        center;
+    text-align: center;
 
     padding:
         38px
@@ -522,17 +506,12 @@ body {{
 
 .logo {{
 
-    width:
-        190px;
+    width: 190px;
+    max-width: 75%;
 
-    max-width:
-        75%;
+    height: auto;
 
-    height:
-        auto;
-
-    display:
-        block;
+    display: block;
 
     margin:
         0
@@ -552,8 +531,7 @@ body {{
 
 .badge {{
 
-    display:
-        inline-block;
+    display: inline-block;
 
     padding:
         8px
@@ -588,8 +566,7 @@ body {{
 
 h1 {{
 
-    margin:
-        0;
+    margin: 0;
 
     font-size:
         clamp(
@@ -598,8 +575,7 @@ h1 {{
             58px
         );
 
-    line-height:
-        1.05;
+    line-height: 1.05;
 
     text-shadow:
         0
@@ -611,24 +587,19 @@ h1 {{
 
 .server-name {{
 
-    margin-top:
-        14px;
+    margin-top: 14px;
 
-    color:
-        #ffd493;
+    color: #ffd493;
 
-    font-size:
-        22px;
+    font-size: 22px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }}
 
 
 .description {{
 
-    max-width:
-        820px;
+    max-width: 820px;
 
     margin:
         20px
@@ -639,11 +610,9 @@ h1 {{
     color:
         #e7e3df;
 
-    font-size:
-        16px;
+    font-size: 16px;
 
-    line-height:
-        1.7;
+    line-height: 1.7;
 }}
 
 
@@ -653,14 +622,12 @@ h1 {{
 
 .stats {{
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(2, 1fr);
 
-    gap:
-        24px;
+    gap: 24px;
 
     padding:
         28px
@@ -670,8 +637,7 @@ h1 {{
 
 .stat {{
 
-    text-align:
-        center;
+    text-align: center;
 
     padding:
         30px
@@ -695,11 +661,9 @@ h1 {{
 
 .number {{
 
-    display:
-        block;
+    display: block;
 
-    margin-bottom:
-        9px;
+    margin-bottom: 9px;
 
     font-size:
         clamp(
@@ -708,14 +672,11 @@ h1 {{
             62px
         );
 
-    line-height:
-        1;
+    line-height: 1;
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    color:
-        white;
+    color: white;
 
     text-shadow:
         0
@@ -727,33 +688,24 @@ h1 {{
 
 .label {{
 
-    color:
-        #d4d7de;
+    color: #d4d7de;
 
-    font-size:
-        16px;
+    font-size: 16px;
 }}
 
 
 .online-dot {{
 
-    display:
-        inline-block;
+    display: inline-block;
 
-    width:
-        10px;
+    width: 10px;
+    height: 10px;
 
-    height:
-        10px;
+    margin-right: 7px;
 
-    margin-right:
-        7px;
+    border-radius: 50%;
 
-    border-radius:
-        50%;
-
-    background:
-        #3ba55d;
+    background: #3ba55d;
 
     box-shadow:
         0
@@ -764,13 +716,12 @@ h1 {{
 
 
 /* =========================================================
-   BOUTON DISCORD
+   DISCORD
    ========================================================= */
 
 .discord-area {{
 
-    text-align:
-        center;
+    text-align: center;
 
     padding:
         4px
@@ -782,8 +733,7 @@ h1 {{
 
 .main-text {{
 
-    max-width:
-        760px;
+    max-width: 760px;
 
     margin:
         0
@@ -791,47 +741,37 @@ h1 {{
         25px
         auto;
 
-    color:
-        #f2f2f2;
+    color: #f2f2f2;
 
-    font-size:
-        17px;
+    font-size: 17px;
 
-    line-height:
-        1.7;
+    line-height: 1.7;
 }}
 
 
 .main-text strong {{
 
-    color:
-        #ffd18a;
+    color: #ffd18a;
 }}
 
 
 .discord-button {{
 
-    display:
-        inline-block;
+    display: inline-block;
 
     padding:
         16px
         30px;
 
-    border-radius:
-        14px;
+    border-radius: 14px;
 
-    text-decoration:
-        none;
+    text-decoration: none;
 
-    color:
-        white;
+    color: white;
 
-    font-size:
-        17px;
+    font-size: 17px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 
     background:
         linear-gradient(
@@ -847,7 +787,8 @@ h1 {{
         rgba(88, 101, 242, 0.35);
 
     transition:
-        0.2s;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }}
 
 
@@ -886,76 +827,56 @@ h1 {{
         22px
         0;
 
-    text-align:
-        center;
+    text-align: center;
 
-    font-size:
-        26px;
+    font-size: 26px;
 }}
 
 
 .links-grid {{
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap:
-        18px;
+    gap: 18px;
 }}
 
 
 .link-card {{
 
-    min-height:
-        190px;
+    min-height: 190px;
 
     padding:
         24px
         18px;
 
-    border-radius:
-        18px;
+    border-radius: 18px;
 
-    text-decoration:
-        none;
+    text-decoration: none;
 
-    color:
-        white;
+    color: white;
 
-    text-align:
-        center;
+    text-align: center;
 
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    justify-content:
-        center;
+    justify-content: center;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.055
-        );
+        rgba(255, 255, 255, 0.055);
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.10
-        );
+        rgba(255, 255, 255, 0.10);
 
     transition:
-        0.2s;
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
 }}
 
 
@@ -965,30 +886,17 @@ h1 {{
         translateY(-4px);
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.09
-        );
+        rgba(255, 255, 255, 0.09);
 
     border-color:
-        rgba(
-            255,
-            210,
-            130,
-            0.42
-        );
+        rgba(255, 210, 130, 0.42);
 }}
 
 
 .link-icon {{
 
-    width:
-        52px;
-
-    height:
-        52px;
+    width: 52px;
+    height: 52px;
 
     margin:
         0
@@ -996,37 +904,29 @@ h1 {{
         14px
         auto;
 
-    border-radius:
-        15px;
+    border-radius: 15px;
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    font-size:
-        21px;
+    font-size: 21px;
 
-    font-weight:
-        800;
+    font-weight: 800;
 }}
 
 
 .youtube-icon {{
 
-    background:
-        #ff0033;
+    background: #ff0033;
 }}
 
 
 .foe-icon {{
 
-    color:
-        #ffe1a5;
+    color: #ffe1a5;
 
     background:
         linear-gradient(
@@ -1050,43 +950,33 @@ h1 {{
 
 .link-name {{
 
-    margin-bottom:
-        9px;
+    margin-bottom: 9px;
 
-    font-size:
-        19px;
+    font-size: 19px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }}
 
 
 .youtube-count {{
 
-    margin-bottom:
-        6px;
+    margin-bottom: 6px;
 
-    color:
-        #ffd493;
+    color: #ffd493;
 
-    font-size:
-        24px;
+    font-size: 24px;
 
-    font-weight:
-        800;
+    font-weight: 800;
 }}
 
 
 .link-detail {{
 
-    color:
-        #c4c9d2;
+    color: #c4c9d2;
 
-    font-size:
-        14px;
+    font-size: 14px;
 
-    line-height:
-        1.45;
+    line-height: 1.45;
 }}
 
 
@@ -1108,34 +998,23 @@ h1 {{
 
     border-top:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.08
-        );
+        rgba(255, 255, 255, 0.08);
 
-    text-align:
-        center;
+    text-align: center;
 
-    color:
-        #aeb4bf;
+    color: #aeb4bf;
 
-    font-size:
-        13px;
+    font-size: 13px;
 }}
 
 
 .footer {{
 
-    margin-top:
-        8px;
+    margin-top: 8px;
 
-    color:
-        #7f8794;
+    color: #7f8794;
 
-    font-size:
-        12px;
+    font-size: 12px;
 }}
 
 
@@ -1295,7 +1174,6 @@ activité de la communauté francophone de Forge of Empires !
 </div>
 
 
-
 <section class="stats">
 
 
@@ -1310,7 +1188,6 @@ membres sur le serveur
 </span>
 
 </div>
-
 
 
 <div class="stat">
@@ -1331,7 +1208,6 @@ membres actuellement en ligne
 
 
 </section>
-
 
 
 <div class="discord-area">
@@ -1369,7 +1245,6 @@ Rejoindre le serveur Discord
 </div>
 
 
-
 <section class="links-section">
 
 
@@ -1381,7 +1256,6 @@ Retrouve Legodingo13
 <div class="links-grid">
 
 
-
 <a
     class="link-card"
     href="{YOUTUBE_URL}"
@@ -1389,29 +1263,23 @@ Retrouve Legodingo13
     rel="noopener noreferrer"
 >
 
-
 <div class="link-icon youtube-icon">
 ▶
 </div>
-
 
 <div class="link-name">
 YouTube
 </div>
 
-
 <div class="youtube-count">
 {youtube_display}
 </div>
-
 
 <div class="link-detail">
 Chaîne YouTube Legodingo13
 </div>
 
-
 </a>
-
 
 
 <a
@@ -1421,24 +1289,19 @@ Chaîne YouTube Legodingo13
     rel="noopener noreferrer"
 >
 
-
 <div class="link-icon foe-icon">
 FOE
 </div>
-
 
 <div class="link-name">
 Forge of Empires
 </div>
 
-
 <div class="link-detail">
 Accéder au site officiel francophone du jeu
 </div>
 
-
 </a>
-
 
 
 <a
@@ -1448,31 +1311,25 @@ Accéder au site officiel francophone du jeu
     rel="noopener noreferrer"
 >
 
-
 <div class="link-icon guns-icon">
 L13
 </div>
-
 
 <div class="link-name">
 guns.lol
 </div>
 
-
 <div class="link-detail">
 Accéder à la page de Legodingo13
 </div>
 
-
 </a>
-
 
 
 </div>
 
 
 </section>
-
 
 
 <div class="update">
@@ -1507,7 +1364,7 @@ mises à jour automatiquement.
 
 
 # =========================================================
-# ENREGISTREMENT DU SITE
+# ENREGISTREMENT
 # =========================================================
 
 with open(
@@ -1520,22 +1377,33 @@ with open(
 
 
 # =========================================================
-# COPIE DU FOND ET DU LOGO
+# COPIE DE TOUS LES FICHIERS NÉCESSAIRES
 # =========================================================
 
-for image in [
+assets = [
     "fond.png",
-    "logo.png"
-]:
+    "logo.png",
+    "cursor_default.cur",
+    "cursor_hover.cur"
+]
 
-    if os.path.exists(image):
+
+for asset in assets:
+
+    if os.path.exists(asset):
 
         shutil.copy2(
-            image,
+            asset,
             os.path.join(
                 "_site",
-                image
+                asset
             )
+        )
+
+    else:
+
+        print(
+            f"ATTENTION : {asset} est introuvable."
         )
 
 
