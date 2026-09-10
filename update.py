@@ -20,6 +20,27 @@ SOCIALCOUNTS_URL = (
 )
 FOE_URL = "https://fr0.forgeofempires.com/page/"
 GUNS_URL = "https://guns.lol/legodingo13"
+
+# Sites tiers Forge of Empires
+FOE_WIKI_URL = "https://fr.wiki.forgeofempires.com/index.php?title=Accueil"
+FORGEDB_URL = "https://foestats.com/"
+FOE_SCOREDB_URL = "https://foe.scoredb.io/Worlds"
+FOE_DATA_URL = "https://foe-data.ovh/"
+BANANA_DB_URL = "https://foe-buildings-database.streamlit.app/"
+FOE_TOOLS_URL = "https://foe.tools/fr/"
+
+# Extensions
+FOE_HAMMER_URL = "https://chromewebstore.google.com/detail/forge-hammer/kmicglnhmpaebfcoiojigbnepklclboa?hl=fr"
+FOE_HELPER_URL = "https://foe-helper.com/"
+
+# Chaînes YouTube tierces
+UBERNERD14_URL = "https://www.youtube.com/@UBERnerd14"
+SENSHI_URL = "https://www.youtube.com/@drikanorrin9697"
+PIXELPULSE_URL = "https://www.youtube.com/@PixelVibes63"
+MOOINGCAT_URL = "https://www.youtube.com/@MooingCatFoE"
+GUIGEEKS_URL = "https://www.youtube.com/@GuigeekX"
+ZOUMA_URL = "https://www.youtube.com/@PassionFoeforgeofempire"
+
 SITE_BASE = "https://legodingo13.github.io/serveur-discord-legodingo13/"
 
 # Nous ajouterons la vraie balise Google Search Console plus tard.
@@ -286,6 +307,46 @@ h2 { margin: 10px 0 16px; }
 .guns-logo { width:92px; height:92px; }
 .server-logo-small { width:100px; height:auto; }
 .profile-tableau-logo { width:110px; height:110px; object-fit:contain; }
+
+.section-block { margin-top: 44px; }
+.section-block:first-of-type { margin-top: 30px; }
+.section-title {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #ffffff;
+}
+.section-subtitle {
+    max-width: 820px;
+    margin: 0 auto 18px;
+    color: #bfc5cf;
+    font-size: 14px;
+    line-height: 1.55;
+}
+.third-party-logo {
+    width: 96px;
+    height: 88px;
+    object-fit: contain;
+}
+.third-party-logo.wide {
+    width: 108px;
+    height: 82px;
+}
+.third-party-logo.small {
+    width: 82px;
+    height: 82px;
+}
+.external-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,212,147,.22);
+    background: rgba(255,212,147,.07);
+    color: #d9c39f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .35px;
+}
 .tile-title { font-size:19px; font-weight:700; margin-bottom:7px; }
 .tile-detail { color:#c4c9d2; font-size:14px; line-height:1.45; }
 .tile-count { color:#ffd493; font-size:25px; font-weight:800; margin-bottom:7px; }
@@ -385,13 +446,18 @@ home_body = f"""
 <h1>Legodingo13</h1>
 <p class="lead">
 Bienvenue sur le site de la communauté Legodingo13 autour de Forge of Empires.
-Retrouve ici le serveur Discord, la chaîne YouTube, le site officiel de Forge of Empires,
-le tableau Excel des mondes FOE et la page guns.lol de Legodingo13.
+Retrouve ici mes liens officiels, puis une sélection de sites, extensions et chaînes YouTube tierces utiles à la communauté Forge of Empires.
 </p>
+
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur Discord</span></div>
     <div class="stat"><span class="number">{youtube_subscribers}</span><span class="label">abonnés sur YouTube</span></div>
 </div>
+
+<section class="section-block">
+<h2 class="section-title">Liens Legodingo13</h2>
+<p class="section-subtitle">Mes pages, mon serveur et les accès directement liés à la communauté Legodingo13.</p>
+
 <div class="grid">
     <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
@@ -399,6 +465,126 @@ le tableau Excel des mondes FOE et la page guns.lol de Legodingo13.
     <a class="tile" href="profil.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
     <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
+</section>
+
+<section class="section-block">
+<h2 class="section-title">Sites tiers</h2>
+<p class="section-subtitle">Outils, bases de données et ressources externes consacrés à Forge of Empires.</p>
+
+<div class="grid">
+    <a class="tile" href="{FOE_WIKI_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_logo.png" class="tile-logo foe-logo" alt="Wiki Forge of Empires">
+        <div class="tile-title">Wiki Forge of Empires</div>
+        <div class="tile-detail">Wiki francophone consacré à Forge of Empires.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+
+    <a class="tile" href="{FORGEDB_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="forgedb.png" class="tile-logo third-party-logo" alt="ForgeDB">
+        <div class="tile-title">ForgeDB</div>
+        <div class="tile-detail">Base de données et statistiques autour de Forge of Empires.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+
+    <a class="tile" href="{FOE_SCOREDB_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_scoredb.png" class="tile-logo third-party-logo small" alt="FOE ScoreDB">
+        <div class="tile-title">FOE ScoreDB</div>
+        <div class="tile-detail">Base de données et classements Forge of Empires.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+
+    <a class="tile" href="{FOE_DATA_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_data.png" class="tile-logo third-party-logo" alt="FOE Data">
+        <div class="tile-title">FOE Data</div>
+        <div class="tile-detail">Base de données consacrée à Forge of Empires.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+
+    <a class="tile" href="{BANANA_DB_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="banana_db.png" class="tile-logo third-party-logo" alt="Born To Be A Banana">
+        <div class="tile-title">Born To Be A Banana</div>
+        <div class="tile-detail">Base de données consacrée aux bâtiments de Forge of Empires.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+
+    <a class="tile" href="{FOE_TOOLS_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_tools.png" class="tile-logo third-party-logo" alt="FOE Tools">
+        <div class="tile-title">FOE Tools</div>
+        <div class="tile-detail">Assistant pour calculer les places et investissements des Grands Monuments.</div>
+        <div class="external-badge">SITE TIERS</div>
+    </a>
+</div>
+</section>
+
+<section class="section-block">
+<h2 class="section-title">Extensions du jeu</h2>
+<p class="section-subtitle">Extensions tierces utiles pour accompagner Forge of Empires dans le navigateur.</p>
+
+<div class="grid two">
+    <a class="tile" href="{FOE_HAMMER_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_hammer.png" class="tile-logo third-party-logo" alt="FOE Hammer">
+        <div class="tile-title">FOE Hammer</div>
+        <div class="tile-detail">Extension Chrome pour Forge of Empires.</div>
+        <div class="external-badge">EXTENSION TIERCE</div>
+    </a>
+
+    <a class="tile" href="{FOE_HELPER_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="foe_helper.png" class="tile-logo third-party-logo" alt="FOE Helper">
+        <div class="tile-title">FOE Helper</div>
+        <div class="tile-detail">Extension et assistant communautaire pour Forge of Empires.</div>
+        <div class="external-badge">EXTENSION TIERCE</div>
+    </a>
+</div>
+</section>
+
+<section class="section-block">
+<h2 class="section-title">Chaînes YouTube tierces</h2>
+<p class="section-subtitle">Quelques chaînes YouTube consacrées à Forge of Empires.</p>
+
+<div class="grid">
+    <a class="tile" href="{UBERNERD14_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="ubernerd14.png" class="tile-logo third-party-logo" alt="UBERnerd14">
+        <div class="tile-title">UBERnerd14</div>
+        <div class="tile-detail">Le plus gros YouTuber Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+
+    <a class="tile" href="{SENSHI_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Senshi">
+        <div class="tile-title">Senshi</div>
+        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+
+    <a class="tile" href="{PIXELPULSE_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube PixelPulse">
+        <div class="tile-title">PixelPulse</div>
+        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+
+    <a class="tile" href="{MOOINGCAT_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube MooingCatFOE">
+        <div class="tile-title">MooingCatFOE</div>
+        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+
+    <a class="tile" href="{GUIGEEKS_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Guigeeks">
+        <div class="tile-title">Guigeeks</div>
+        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+
+    <a class="tile" href="{ZOUMA_URL}" target="_blank" rel="noopener noreferrer">
+        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Zouma">
+        <div class="tile-title">Zouma</div>
+        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
+        <div class="external-badge">CHAÎNE TIERCE</div>
+    </a>
+</div>
+</section>
 """
 shell(
     "index.html",
@@ -545,6 +731,21 @@ assets = [
     "foe_logo.png",
     "guns.png",
     "profil_tableau.png",
+
+    # Logos des sites tiers
+    "forgedb.png",
+    "foe_scoredb.png",
+    "foe_data.png",
+    "banana_db.png",
+    "foe_tools.png",
+
+    # Logos des extensions
+    "foe_hammer.png",
+    "foe_helper.png",
+
+    # Logo de la chaîne UBERnerd14
+    "ubernerd14.png",
+
     "cursor_default.cur",
     "cursor_hover.cur",
     "tableau.png",
