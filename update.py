@@ -394,7 +394,7 @@ le tableau Excel des mondes FOE et la page guns.lol de Legodingo13.
     <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu.</div></a>
-    <a class="tile" href="tableau.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
+    <a class="tile" href="profil.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
     <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
 """
@@ -462,57 +462,56 @@ shell(
 )
 
 
-# PROFIL
-profil_body = f"""
-<img src="guns.png" class="tile-logo guns-logo" alt="Logo profil Legodingo13">
-<h1>Profil Legodingo13</h1>
-<p class="lead">Retrouve les principaux liens publics associés à Legodingo13 et à sa communauté Forge of Empires.</p>
-<div class="grid two">
-    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol"><div class="tile-title">guns.lol</div><div class="tile-detail">Page de profil Legodingo13</div></a>
-    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Site officiel francophone du jeu</div></a>
-</div>
-"""
-shell(
-    "profil.html",
-    "profil",
-    "Profil Legodingo13 - Liens officiels",
-    "Profil Legodingo13 : guns.lol, Forge of Empires, Discord et YouTube.",
-    profil_body,
-)
-
-
-# TABLEAU
+# PROFIL = TABLEAU EXCEL
 if os.path.exists("tableau.png"):
-    tableau_view = """
+    profil_tableau_view = """
     <div class="table-frame">
-        <img src="tableau.png" class="table-image" alt="Tableau communautaire Forge of Empires de Legodingo13">
+        <img src="tableau.png" class="table-image" alt="Tableau Excel des mondes Forge of Empires de Legodingo13">
     </div>
     <a class="primary-button gold-button" href="tableau.png" target="_blank" rel="noopener noreferrer">Ouvrir le tableau en grand</a>
     """
 else:
-    tableau_view = """
+    profil_tableau_view = """
     <div class="notice">
         Aucun tableau n'a encore été envoyé sur le site. Il apparaîtra ici automatiquement
         après le prochain lancement de l'application Legodingo13 Bot4.
     </div>
     """
 
-tableau_body = f"""
-<h1>Tableau communautaire</h1>
+profil_body = f"""
+<img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13">
+<h1>Profil Legodingo13</h1>
 <p class="lead">
-Cette page affiche la dernière version du tableau Excel publiée depuis l'application
-Legodingo13 Bot4. Enregistre le fichier Excel avant d'ouvrir l'application pour publier
-les dernières modifications.
+Tableau Excel des mondes Forge of Empires de Legodingo13. Cette page affiche la dernière
+version publiée depuis l'application Legodingo13 Bot4. Enregistre le fichier Excel avant
+d'ouvrir l'application pour publier les dernières modifications.
 </p>
-{tableau_view}
+{profil_tableau_view}
 """
 shell(
-    "tableau.html",
-    "",
-    "Tableau communautaire Legodingo13 - Forge of Empires",
-    "Dernière version du tableau communautaire Forge of Empires publiée par Legodingo13.",
-    tableau_body,
+    "profil.html",
+    "profil",
+    "Profil Legodingo13 - Tableau Excel des mondes FOE",
+    "Profil Legodingo13 : dernière version du tableau Excel des mondes Forge of Empires.",
+    profil_body,
 )
+
+
+# TABLEAU - ANCIENNE URL CONSERVÉE POUR COMPATIBILITÉ
+# Les anciens liens vers tableau.html redirigent maintenant vers Profil Legodingo13.
+with open(os.path.join("_site", "tableau.html"), "w", encoding="utf-8") as f:
+    f.write("""<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="0; url=profil.html">
+<link rel="canonical" href="https://legodingo13.github.io/serveur-discord-legodingo13/profil.html">
+<title>Profil Legodingo13</title>
+</head>
+<body>
+<p>Redirection vers <a href="profil.html">Profil Legodingo13</a>...</p>
+</body>
+</html>""")
 
 
 # =========================================================
@@ -527,7 +526,6 @@ sitemap_urls = [
     SITE_BASE + "discord.html",
     SITE_BASE + "youtube.html",
     SITE_BASE + "profil.html",
-    SITE_BASE + "tableau.html",
 ]
 
 sitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
