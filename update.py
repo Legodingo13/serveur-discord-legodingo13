@@ -375,6 +375,8 @@ def shell(filename, active, title, description, body):
         f.write(page)
 
 
+if os.path.exists("_site"):
+    shutil.rmtree("_site")
 os.makedirs("_site", exist_ok=True)
 
 
@@ -498,20 +500,14 @@ shell(
 
 
 # TABLEAU - ANCIENNE URL CONSERVÉE POUR COMPATIBILITÉ
-# Les anciens liens vers tableau.html redirigent maintenant vers Profil Legodingo13.
-with open(os.path.join("_site", "tableau.html"), "w", encoding="utf-8") as f:
-    f.write("""<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=profil.html">
-<link rel="canonical" href="https://legodingo13.github.io/serveur-discord-legodingo13/profil.html">
-<title>Profil Legodingo13</title>
-</head>
-<body>
-<p>Redirection vers <a href="profil.html">Profil Legodingo13</a>...</p>
-</body>
-</html>""")
+# Même contenu que profil.html afin que TOUS les anciens liens affichent aussi le tableau Excel.
+shell(
+    "tableau.html",
+    "profil",
+    "Profil Legodingo13 - Tableau Excel des mondes FOE",
+    "Profil Legodingo13 : dernière version du tableau Excel des mondes Forge of Empires.",
+    profil_body,
+)
 
 
 # =========================================================
@@ -573,4 +569,4 @@ with open("last-update.txt", "w", encoding="utf-8") as f:
 
 print(f"Discord : {member_count} membres / {online_count} en ligne")
 print(f"YouTube via SocialCounts : {youtube_subscribers} abonnés")
-print("Pages générées : accueil, Discord, YouTube, Profil, Tableau")
+print("Pages générées : Accueil, Discord, YouTube, Profil Legodingo13 (tableau Excel), compatibilité tableau.html")
