@@ -366,6 +366,54 @@ h2 { margin: 10px 0 16px; }
 .footer { margin: 0 38px; padding: 23px 0 30px; border-top:1px solid rgba(255,255,255,.08); text-align:center; color:#aeb4bf; font-size:13px; }
 .footer small { color:#7f8794; }
 
+/* =========================================================
+   LOGO CLIQUABLE + ROI QUI TOMBE
+   ========================================================= */
+
+.logo-trigger {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    line-height: 0;
+}
+
+.logo-trigger .logo {
+    transition: transform .18s ease, filter .18s ease;
+}
+
+.logo-trigger:hover .logo {
+    transform: scale(1.045);
+    filter:
+        drop-shadow(0 8px 15px rgba(0,0,0,.42))
+        drop-shadow(0 0 12px rgba(255,184,82,.22));
+}
+
+.logo-trigger:active .logo {
+    transform: scale(.98);
+}
+
+.falling-king {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: clamp(125px, 15vw, 230px);
+    height: auto;
+    z-index: 99999;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 12px 18px rgba(0,0,0,.38));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .falling-king {
+        display: none;
+    }
+}
+
 @media (max-width:760px) {
     body { padding:18px 10px; background-attachment:scroll; }
     .card { border-radius:20px; }
@@ -378,6 +426,96 @@ h2 { margin: 10px 0 16px; }
     .tile { min-height:155px; }
     .footer { margin:0 18px; }
 }
+"""
+
+SCRIPT = r"""
+<script>
+(function () {
+    const trigger = document.getElementById("logoKingTrigger");
+
+    if (!trigger) return;
+
+    trigger.addEventListener("click", function () {
+        if (document.querySelector(".falling-king")) return;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        const king = document.createElement("img");
+        king.src = "roi_chute.png";
+        king.alt = "";
+        king.className = "falling-king";
+        king.setAttribute("aria-hidden", "true");
+        document.body.appendChild(king);
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const size = Math.min(230, Math.max(125, vw * 0.15));
+
+        const animation = king.animate(
+            [
+                {
+                    transform: `translate(${-size * 0.85}px, ${-size * 1.15}px) rotate(-28deg)`,
+                    opacity: 0,
+                    offset: 0
+                },
+                {
+                    transform: `translate(${vw * 0.02}px, ${vh * 0.02}px) rotate(18deg)`,
+                    opacity: 1,
+                    offset: 0.08
+                },
+                {
+                    transform: `translate(${vw * 0.16}px, ${vh * 0.17}px) rotate(-22deg)`,
+                    opacity: 1,
+                    offset: 0.20
+                },
+                {
+                    transform: `translate(${vw * 0.25}px, ${vh * 0.31}px) rotate(25deg)`,
+                    opacity: 1,
+                    offset: 0.34
+                },
+                {
+                    transform: `translate(${vw * 0.43}px, ${vh * 0.43}px) rotate(-20deg)`,
+                    opacity: 1,
+                    offset: 0.48
+                },
+                {
+                    transform: `translate(${vw * 0.53}px, ${vh * 0.58}px) rotate(21deg)`,
+                    opacity: 1,
+                    offset: 0.62
+                },
+                {
+                    transform: `translate(${vw * 0.71}px, ${vh * 0.70}px) rotate(-17deg)`,
+                    opacity: 1,
+                    offset: 0.76
+                },
+                {
+                    transform: `translate(${vw * 0.82}px, ${vh * 0.87}px) rotate(19deg)`,
+                    opacity: 1,
+                    offset: 0.89
+                },
+                {
+                    transform: `translate(${vw + size * 0.85}px, ${vh + size * 0.65}px) rotate(-12deg)`,
+                    opacity: 0,
+                    offset: 1
+                }
+            ],
+            {
+                duration: 5200,
+                easing: "ease-in-out",
+                fill: "forwards"
+            }
+        );
+
+        animation.onfinish = function () {
+            king.remove();
+        };
+
+        animation.oncancel = function () {
+            king.remove();
+        };
+    });
+})();
+</script>
 """
 
 
@@ -418,7 +556,15 @@ def shell(filename, active, title, description, body):
 <main class="page">
 <section class="card">
 <header class="site-head">
-    <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
+    <button
+        type="button"
+        class="logo-trigger"
+        id="logoKingTrigger"
+        aria-label="Faire tomber le roi Legodingo13"
+        title="Clique sur le logo"
+    >
+        <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
+    </button>
     <div class="badge">COMMUNAUTÉ LEGODINGO13</div>
     <nav class="nav" aria-label="Navigation principale">{navigation(active)}</nav>
 </header>
@@ -429,6 +575,7 @@ def shell(filename, active, title, description, body):
 </footer>
 </section>
 </main>
+{SCRIPT}
 </body>
 </html>"""
 
@@ -731,6 +878,7 @@ assets = [
     "foe_logo.png",
     "guns.png",
     "profil_tableau.png",
+    "roi_chute.png",
 
     # Logos des sites tiers
     "forgedb.png",
