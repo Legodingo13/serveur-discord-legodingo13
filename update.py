@@ -370,12 +370,21 @@ h2 { margin: 10px 0 16px; }
    LOGO CLIQUABLE + ROI QUI TOMBE
    ========================================================= */
 
+.logo-zone {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 14px 0;
+}
+
 .logo-trigger {
     display: block;
+    flex: 0 0 165px;
     width: 165px;
     max-width: 72%;
     padding: 0;
-    margin: 0 auto 14px;
+    margin: 0;
     border: 0;
     background: transparent;
     line-height: 0;
@@ -426,7 +435,7 @@ h2 { margin: 10px 0 16px; }
     .card { border-radius:20px; }
     .site-head { padding:25px 16px 12px; }
     .logo { width:145px; }
-    .logo-trigger { width:145px; }
+    .logo-trigger { flex-basis:145px; width:145px; }
     .nav { gap:7px; }
     .nav a { flex:1 1 calc(50% - 8px); padding:10px 8px; }
     .content { padding:15px 18px 28px; }
@@ -564,15 +573,17 @@ def shell(filename, active, title, description, body):
 <main class="page">
 <section class="card">
 <header class="site-head">
-    <button
-        type="button"
-        class="logo-trigger"
-        id="logoKingTrigger"
-        aria-label="Faire tomber le roi Legodingo13"
-        title="Clique sur le logo"
-    >
-        <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
-    </button>
+    <div class="logo-zone">
+        <button
+            type="button"
+            class="logo-trigger"
+            id="logoKingTrigger"
+            aria-label="Faire tomber le roi Legodingo13"
+            title="Clique sur le logo"
+        >
+            <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
+        </button>
+    </div>
     <div class="badge">COMMUNAUTÉ LEGODINGO13</div>
     <nav class="nav" aria-label="Navigation principale">{navigation(active)}</nav>
 </header>
