@@ -3,9 +3,8 @@ import json
 import html
 import os
 import shutil
+import re
 from datetime import datetime, timezone
-
-import yt_dlp
 
 
 # =========================================================
@@ -15,7 +14,12 @@ import yt_dlp
 DISCORD_INVITE = "ujHH2bNzhn"
 
 YOUTUBE_URL = "https://www.youtube.com/@Legodingo13"
-YOUTUBE_VIDEOS_URL = "https://www.youtube.com/@Legodingo13/videos"
+
+SOCIALCOUNTS_URL = (
+    "https://socialcounts.org/"
+    "youtube-live-subscriber-count/"
+    "UC_1T2zJa_uOU2xNeQHdPutQ"
+)
 
 FOE_URL = "https://fr0.forgeofempires.com/page/"
 GUNS_URL = "https://guns.lol/legodingo13"
@@ -40,7 +44,11 @@ def read_previous_youtube_count():
         return None
 
     try:
-        with open("last-update.txt", "r", encoding="utf-8") as f:
+        with open(
+            "last-update.txt",
+            "r",
+            encoding="utf-8"
+        ) as f:
 
             for line in f:
 
@@ -61,146 +69,135 @@ def read_previous_youtube_count():
     return None
 
 
-def find_follower_count(data):
-
-    if isinstance(data, dict):
-
-        count = data.get("channel_follower_count")
-
-        if count is not None:
-            return count
-
-        entries = data.get("entries")
-
-        if entries:
-
-            for entry in entries:
-
-                result = find_follower_count(entry)
-
-                if result is not None:
-                    return result
-
-    elif isinstance(data, list):
-
-        for item in data:
-
-            result = find_follower_count(item)
-
-            if result is not None:
-                return result
-
-    return None
-
-
-def get_first_video_url():
-
-    options = {
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-        "extract_flat": "in_playlist",
-        "playlist_items": "1",
-    }
-
-    with yt_dlp.YoutubeDL(options) as ydl:
-
-        info = ydl.extract_info(
-            YOUTUBE_VIDEOS_URL,
-            download=False
-        )
-
-    entries = info.get("entries") or []
-
-    if not entries:
-        return None
-
-    entry = entries[0] or {}
-
-    if entry.get("webpage_url"):
-        return entry["webpage_url"]
-
-    if entry.get("id"):
-
-        return (
-            "https://www.youtube.com/watch?v="
-            + entry["id"]
-        )
-
-    if (
-        isinstance(entry.get("url"), str)
-        and entry["url"].startswith("http")
-    ):
-        return entry["url"]
-
-    return None
-
-
 def get_youtube_subscribers():
 
     previous_count = read_previous_youtube_count()
 
-    options = {
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-    }
-
     try:
 
-        with yt_dlp.YoutubeDL(options) as ydl:
+        request = urllib.request.Request(
+            SOCIALCOUNTS_URL,
+            headers={
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/140.0 Safari/537.36",
 
-            info = ydl.extract_info(
-                YOUTUBE_URL,
-                download=False
+                "Accept":
+                    "text/html,application/xhtml+xml,"
+                    "application/xml;q=0.9,*/*;q=0.8",
+
+                "Accept-Language":
+                    "fr-FR,fr;q=0.9,en;q=0.8"
+            }
+        )
+
+        with urllib.request.urlopen(
+            request,
+            timeout=30
+        ) as response:
+
+            page = response.read().decode(
+                "utf-8",
+                errors="ignore"
             )
 
-        count = find_follower_count(info)
 
-        if count is not None:
-            return format_number(count)
+        # -------------------------------------------------
+        # MÉTHODE 1
+        # Phrase publique affichée par SocialCounts
+        #
+        # Exemple :
+        # "Legodingo13's YouTube presence with
+        # 313 subscribers"
+        # -------------------------------------------------
 
-    except Exception as error:
+        patterns = [
 
-        print(
-            "Lecture directe YouTube impossible :",
-            error
-        )
+            r"Legodingo13(?:&#x27;|['’])s "
+            r"YouTube presence with\s*"
+            r"([\d,\s]+)\s*subscribers",
 
+            r"Legodingo13.*?"
+            r"YouTube presence with\s*"
+            r"([\d,\s]+)\s*subscribers",
 
-    try:
+            r"with\s*"
+            r"([\d,\s]+)\s*subscribers"
+            r"\s+and\s+[\d,\s]+\s+videos"
 
-        video_url = get_first_video_url()
+        ]
 
-        if video_url:
+        for pattern in patterns:
 
-            video_options = {
-                "quiet": True,
-                "no_warnings": True,
-                "skip_download": True,
-                "noplaylist": True,
-            }
+            match = re.search(
+                pattern,
+                page,
+                flags=re.IGNORECASE | re.DOTALL
+            )
 
-            with yt_dlp.YoutubeDL(video_options) as ydl:
+            if match:
 
-                video_info = ydl.extract_info(
-                    video_url,
-                    download=False
+                number = re.sub(
+                    r"[^\d]",
+                    "",
+                    match.group(1)
                 )
 
-            count = find_follower_count(video_info)
+                if number:
 
-            if count is not None:
-                return format_number(count)
+                    return format_number(
+                        int(number)
+                    )
+
+
+        # -------------------------------------------------
+        # MÉTHODE 2
+        # Recherche de données intégrées dans le HTML
+        # -------------------------------------------------
+
+        json_patterns = [
+
+            r'"subscriberCount"\s*:\s*"?(\d+)"?',
+
+            r'"subscribers"\s*:\s*"?(\d+)"?',
+
+            r'"subscriber_count"\s*:\s*"?(\d+)"?'
+
+        ]
+
+        for pattern in json_patterns:
+
+            match = re.search(
+                pattern,
+                page,
+                flags=re.IGNORECASE
+            )
+
+            if match:
+
+                return format_number(
+                    int(match.group(1))
+                )
+
+
+        print(
+            "SocialCounts a répondu, "
+            "mais le nombre d'abonnés "
+            "n'a pas été trouvé."
+        )
+
 
     except Exception as error:
 
         print(
-            "Lecture YouTube via vidéo impossible :",
+            "Impossible de lire SocialCounts :",
             error
         )
 
 
+    # Si SocialCounts connaît momentanément
+    # un problème, on garde le dernier compteur.
     if previous_count:
         return previous_count
 
@@ -259,7 +256,7 @@ online_count = format_number(
 
 
 # =========================================================
-# YOUTUBE
+# STATISTIQUES YOUTUBE VIA SOCIALCOUNTS
 # =========================================================
 
 youtube_subscribers = get_youtube_subscribers()
@@ -313,7 +310,7 @@ Legodingo13 - Discord, YouTube et Forge of Empires
 
 <meta
     name="description"
-    content="Legodingo13 : serveur Discord francophone Forge of Empires avec {member_count} membres, chaîne YouTube Legodingo13 avec {youtube_display}."
+    content="Legodingo13 : serveur Discord francophone Forge of Empires avec {member_count} membres et chaîne YouTube avec {youtube_display}."
 >
 
 <meta
@@ -331,10 +328,6 @@ Legodingo13 - Discord, YouTube et Forge of Empires
    CURSEURS PERSONNALISÉS
    ========================================================= */
 
-/*
-   Curseur normal partout sur la page
-*/
-
 html,
 body {{
 
@@ -344,22 +337,12 @@ body {{
 }}
 
 
-/*
-   Les éléments à l'intérieur de la page
-   conservent le curseur normal
-*/
-
 body * {{
 
     cursor:
         inherit;
 }}
 
-
-/*
-   Curseur avec le bout vert
-   pour tous les éléments cliquables
-*/
 
 a,
 a *,
@@ -452,8 +435,7 @@ body {{
     border-radius:
         28px;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     box-shadow:
         0
@@ -508,7 +490,6 @@ body {{
 
     width: 190px;
     max-width: 75%;
-
     height: auto;
 
     display: block;
@@ -537,11 +518,9 @@ body {{
         8px
         17px;
 
-    margin-bottom:
-        18px;
+    margin-bottom: 18px;
 
-    border-radius:
-        999px;
+    border-radius: 999px;
 
     background:
         rgba(202, 112, 33, 0.20);
@@ -550,17 +529,12 @@ body {{
         1px solid
         rgba(255, 183, 82, 0.40);
 
-    color:
-        #ffd69a;
+    color: #ffd69a;
 
-    font-size:
-        13px;
+    font-size: 13px;
+    font-weight: bold;
 
-    font-weight:
-        bold;
-
-    letter-spacing:
-        1px;
+    letter-spacing: 1px;
 }}
 
 
@@ -592,7 +566,6 @@ h1 {{
     color: #ffd493;
 
     font-size: 22px;
-
     font-weight: bold;
 }}
 
@@ -607,11 +580,9 @@ h1 {{
         0
         auto;
 
-    color:
-        #e7e3df;
+    color: #e7e3df;
 
     font-size: 16px;
-
     line-height: 1.7;
 }}
 
@@ -643,8 +614,7 @@ h1 {{
         30px
         20px;
 
-    border-radius:
-        20px;
+    border-radius: 20px;
 
     background:
         linear-gradient(
@@ -744,7 +714,6 @@ h1 {{
     color: #f2f2f2;
 
     font-size: 17px;
-
     line-height: 1.7;
 }}
 
@@ -770,7 +739,6 @@ h1 {{
     color: white;
 
     font-size: 17px;
-
     font-weight: bold;
 
     background:
@@ -794,8 +762,7 @@ h1 {{
 
 .discord-button:hover {{
 
-    transform:
-        translateY(-3px);
+    transform: translateY(-3px);
 
     box-shadow:
         0
@@ -861,9 +828,7 @@ h1 {{
     text-align: center;
 
     display: flex;
-
     flex-direction: column;
-
     justify-content: center;
 
     background:
@@ -882,8 +847,7 @@ h1 {{
 
 .link-card:hover {{
 
-    transform:
-        translateY(-4px);
+    transform: translateY(-4px);
 
     background:
         rgba(255, 255, 255, 0.09);
@@ -907,13 +871,10 @@ h1 {{
     border-radius: 15px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     font-size: 21px;
-
     font-weight: 800;
 }}
 
@@ -953,7 +914,6 @@ h1 {{
     margin-bottom: 9px;
 
     font-size: 19px;
-
     font-weight: bold;
 }}
 
@@ -965,7 +925,6 @@ h1 {{
     color: #ffd493;
 
     font-size: 24px;
-
     font-weight: 800;
 }}
 
@@ -975,7 +934,6 @@ h1 {{
     color: #c4c9d2;
 
     font-size: 14px;
-
     line-height: 1.45;
 }}
 
@@ -1019,7 +977,7 @@ h1 {{
 
 
 /* =========================================================
-   VERSION TÉLÉPHONE
+   TÉLÉPHONE
    ========================================================= */
 
 @media
@@ -1038,8 +996,7 @@ h1 {{
 
     .card {{
 
-        border-radius:
-            20px;
+        border-radius: 20px;
     }}
 
 
@@ -1055,22 +1012,19 @@ h1 {{
 
     .logo {{
 
-        width:
-            155px;
+        width: 155px;
     }}
 
 
     .stats {{
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
 
         padding:
             22px
             20px;
 
-        gap:
-            15px;
+        gap: 15px;
     }}
 
 
@@ -1086,8 +1040,7 @@ h1 {{
 
     .discord-button {{
 
-        width:
-            100%;
+        width: 100%;
     }}
 
 
@@ -1103,15 +1056,13 @@ h1 {{
 
     .links-grid {{
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }}
 
 
     .link-card {{
 
-        min-height:
-            155px;
+        min-height: 155px;
     }}
 
 
@@ -1138,7 +1089,6 @@ h1 {{
 
 
 <div class="header">
-
 
 <img
     src="logo.png"
@@ -1328,7 +1278,6 @@ Accéder à la page de Legodingo13
 
 </div>
 
-
 </section>
 
 
@@ -1364,7 +1313,7 @@ mises à jour automatiquement.
 
 
 # =========================================================
-# ENREGISTREMENT
+# ENREGISTREMENT DU SITE
 # =========================================================
 
 with open(
@@ -1377,7 +1326,7 @@ with open(
 
 
 # =========================================================
-# COPIE DE TOUS LES FICHIERS NÉCESSAIRES
+# COPIE DES FICHIERS
 # =========================================================
 
 assets = [
@@ -1441,6 +1390,6 @@ print(
 )
 
 print(
-    f"YouTube : "
+    f"YouTube via SocialCounts : "
     f"{youtube_subscribers} abonnés"
 )
