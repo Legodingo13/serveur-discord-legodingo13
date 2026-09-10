@@ -1,10 +1,25 @@
-name: Mise à jour du compteur Discord
+name: Mise à jour du site Legodingo13
 
 on:
   workflow_dispatch:
 
   schedule:
     - cron: "17 * * * *"
+
+  push:
+    branches:
+      - main
+    paths:
+      - "tableau.png"
+      - "update.py"
+      - "fond.png"
+      - "logo.png"
+      - "Youtube.png"
+      - "foe_logo.png"
+      - "guns.png"
+      - "cursor_default.cur"
+      - "cursor_hover.cur"
+      - ".github/workflows/update-discord.yml"
 
 permissions:
   contents: write
@@ -18,7 +33,6 @@ concurrency:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -31,12 +45,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Récupérer les statistiques
+      - name: Générer toutes les pages du site
         run: python update.py
 
       - name: Enregistrer les nouvelles statistiques
         run: |
-          git config user.name "discord-counter-bot"
+          git config user.name "site-legodingo13-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add last-update.txt
           git diff --cached --quiet || git commit -m "Mise à jour automatique des statistiques"
@@ -46,13 +60,12 @@ jobs:
         uses: actions/configure-pages@v6
 
       - name: Préparer le site
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: "_site"
 
 
   deploy:
-
     needs: build
 
     permissions:
@@ -69,4 +82,4 @@ jobs:
 
       - name: Publier le site
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
