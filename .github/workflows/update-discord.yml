@@ -31,11 +31,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Installer le système YouTube
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install --upgrade yt-dlp
-
       - name: Récupérer les statistiques
         run: python update.py
 
