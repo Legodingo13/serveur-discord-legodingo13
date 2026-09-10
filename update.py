@@ -102,16 +102,6 @@ def get_youtube_subscribers():
                 errors="ignore"
             )
 
-
-        # -------------------------------------------------
-        # MÉTHODE 1
-        # Phrase publique affichée par SocialCounts
-        #
-        # Exemple :
-        # "Legodingo13's YouTube presence with
-        # 313 subscribers"
-        # -------------------------------------------------
-
         patterns = [
 
             r"Legodingo13(?:&#x27;|['’])s "
@@ -150,18 +140,10 @@ def get_youtube_subscribers():
                         int(number)
                     )
 
-
-        # -------------------------------------------------
-        # MÉTHODE 2
-        # Recherche de données intégrées dans le HTML
-        # -------------------------------------------------
-
         json_patterns = [
 
             r'"subscriberCount"\s*:\s*"?(\d+)"?',
-
             r'"subscribers"\s*:\s*"?(\d+)"?',
-
             r'"subscriber_count"\s*:\s*"?(\d+)"?'
 
         ]
@@ -180,13 +162,11 @@ def get_youtube_subscribers():
                     int(match.group(1))
                 )
 
-
         print(
             "SocialCounts a répondu, "
             "mais le nombre d'abonnés "
             "n'a pas été trouvé."
         )
-
 
     except Exception as error:
 
@@ -195,9 +175,6 @@ def get_youtube_subscribers():
             error
         )
 
-
-    # Si SocialCounts connaît momentanément
-    # un problème, on garde le dernier compteur.
     if previous_count:
         return previous_count
 
@@ -256,7 +233,7 @@ online_count = format_number(
 
 
 # =========================================================
-# STATISTIQUES YOUTUBE VIA SOCIALCOUNTS
+# YOUTUBE
 # =========================================================
 
 youtube_subscribers = get_youtube_subscribers()
@@ -325,7 +302,7 @@ Legodingo13 - Discord, YouTube et Forge of Empires
 
 
 /* =========================================================
-   CURSEURS PERSONNALISÉS
+   CURSEURS
    ========================================================= */
 
 html,
@@ -588,7 +565,7 @@ h1 {{
 
 
 /* =========================================================
-   STATISTIQUES DISCORD
+   STATISTIQUES
    ========================================================= */
 
 .stats {{
@@ -880,21 +857,7 @@ h1 {{
 
 
 .youtube-icon {{
-
     background: #ff0033;
-}}
-
-
-.foe-icon {{
-
-    color: #ffe1a5;
-
-    background:
-        linear-gradient(
-            145deg,
-            #b66b27,
-            #744019
-        );
 }}
 
 
@@ -906,6 +869,43 @@ h1 {{
             #7d49df,
             #4c2c8e
         );
+}}
+
+
+/* =========================================================
+   LOGO FORGE OF EMPIRES
+   ========================================================= */
+
+.foe-logo {{
+
+    width: 90px;
+    height: auto;
+
+    display: block;
+
+    margin:
+        0
+        auto
+        12px
+        auto;
+
+    filter:
+        drop-shadow(
+            0
+            5px
+            10px
+            rgba(0, 0, 0, 0.40)
+        );
+
+    transition:
+        transform 0.2s ease;
+}}
+
+
+.link-card:hover .foe-logo {{
+
+    transform:
+        scale(1.07);
 }}
 
 
@@ -995,7 +995,6 @@ h1 {{
 
 
     .card {{
-
         border-radius: 20px;
     }}
 
@@ -1011,7 +1010,6 @@ h1 {{
 
 
     .logo {{
-
         width: 155px;
     }}
 
@@ -1039,7 +1037,6 @@ h1 {{
 
 
     .discord-button {{
-
         width: 100%;
     }}
 
@@ -1055,13 +1052,11 @@ h1 {{
 
 
     .links-grid {{
-
         grid-template-columns: 1fr;
     }}
 
 
     .link-card {{
-
         min-height: 155px;
     }}
 
@@ -1239,9 +1234,11 @@ Chaîne YouTube Legodingo13
     rel="noopener noreferrer"
 >
 
-<div class="link-icon foe-icon">
-FOE
-</div>
+<img
+    src="foe_logo.png"
+    alt="Logo officiel Forge of Empires"
+    class="foe-logo"
+>
 
 <div class="link-name">
 Forge of Empires
@@ -1332,6 +1329,7 @@ with open(
 assets = [
     "fond.png",
     "logo.png",
+    "foe_logo.png",
     "cursor_default.cur",
     "cursor_hover.cur"
 ]
