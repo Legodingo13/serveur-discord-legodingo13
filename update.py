@@ -371,15 +371,22 @@ h2 { margin: 10px 0 16px; }
    ========================================================= */
 
 .logo-trigger {
-    display: inline-block;
+    display: block;
+    width: 165px;
+    max-width: 72%;
     padding: 0;
-    margin: 0;
+    margin: 0 auto 14px;
     border: 0;
     background: transparent;
     line-height: 0;
 }
 
 .logo-trigger .logo {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: 0;
     transition: transform .18s ease, filter .18s ease;
 }
 
@@ -419,6 +426,7 @@ h2 { margin: 10px 0 16px; }
     .card { border-radius:20px; }
     .site-head { padding:25px 16px 12px; }
     .logo { width:145px; }
+    .logo-trigger { width:145px; }
     .nav { gap:7px; }
     .nav a { flex:1 1 calc(50% - 8px); padding:10px 8px; }
     .content { padding:15px 18px 28px; }
