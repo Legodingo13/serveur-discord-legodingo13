@@ -5,6 +5,7 @@ import os
 import shutil
 from datetime import datetime, timezone
 
+
 # =========================================================
 # PARAMÈTRES DU SERVEUR DISCORD
 # =========================================================
@@ -12,7 +13,6 @@ from datetime import datetime, timezone
 INVITE_CODE = "ujHH2bNzhn"
 
 # Cette partie servira plus tard pour Google Search Console.
-# Pour l'instant, ne touche à rien.
 GOOGLE_META = """<!-- Google Search Console -->"""
 
 
@@ -77,17 +77,13 @@ Serveur Discord Legodingo13 - {member_count} membres
 </title>
 
 <meta name="description"
-      content="Le serveur Discord de Legodingo13 compte actuellement environ {member_count} membres, dont {online_count} membres en ligne. Communauté francophone Forge of Empires.">
+      content="Le plus gros serveur communautaire francophone autour de Forge of Empires. Le serveur Discord de Legodingo13 compte actuellement environ {member_count} membres, dont {online_count} membres en ligne.">
 
 <meta name="robots" content="index, follow">
 
 {GOOGLE_META}
 
 <style>
-
-/* =========================================================
-   PARAMÈTRES GÉNÉRAUX
-   ========================================================= */
 
 * {{
     box-sizing: border-box;
@@ -127,16 +123,10 @@ body {{
     padding: 40px 20px;
 }}
 
-
-/* =========================================================
-   CONTENEUR PRINCIPAL
-   ========================================================= */
-
 .page {{
     width: 100%;
     max-width: 1050px;
 }}
-
 
 .card {{
     position: relative;
@@ -163,7 +153,6 @@ body {{
     backdrop-filter: blur(8px);
 }}
 
-
 .card::before {{
     content: "";
 
@@ -184,11 +173,6 @@ body {{
         );
 }}
 
-
-/* =========================================================
-   EN-TÊTE
-   ========================================================= */
-
 .header {{
     text-align: center;
 
@@ -198,7 +182,6 @@ body {{
         15px
         35px;
 }}
-
 
 .logo {{
     width: 190px;
@@ -222,7 +205,6 @@ body {{
             rgba(0, 0, 0, 0.40)
         );
 }}
-
 
 .badge {{
     display: inline-block;
@@ -252,7 +234,6 @@ body {{
     letter-spacing: 1px;
 }}
 
-
 h1 {{
     margin: 0;
 
@@ -272,7 +253,6 @@ h1 {{
         rgba(0, 0, 0, 0.55);
 }}
 
-
 .server-name {{
     margin-top: 14px;
 
@@ -284,9 +264,8 @@ h1 {{
     font-weight: bold;
 }}
 
-
 .description {{
-    max-width: 720px;
+    max-width: 780px;
 
     margin:
         20px
@@ -302,11 +281,6 @@ h1 {{
     line-height: 1.7;
 }}
 
-
-/* =========================================================
-   COMPTEURS
-   ========================================================= */
-
 .stats {{
     display: grid;
 
@@ -319,7 +293,6 @@ h1 {{
         28px
         38px;
 }}
-
 
 .stat {{
     text-align: center;
@@ -349,7 +322,6 @@ h1 {{
         rgba(255, 255, 255, 0.06);
 }}
 
-
 .number {{
     display: block;
 
@@ -375,14 +347,12 @@ h1 {{
         rgba(0, 0, 0, 0.45);
 }}
 
-
 .label {{
     color:
         #d4d7de;
 
     font-size: 16px;
 }}
-
 
 .online-dot {{
     display: inline-block;
@@ -404,11 +374,6 @@ h1 {{
         rgba(59, 165, 93, 0.8);
 }}
 
-
-/* =========================================================
-   TEXTE ET BOUTON
-   ========================================================= */
-
 .bottom {{
     text-align: center;
 
@@ -418,7 +383,6 @@ h1 {{
         34px
         38px;
 }}
-
 
 .main-text {{
     max-width: 760px;
@@ -437,12 +401,10 @@ h1 {{
     line-height: 1.7;
 }}
 
-
 .main-text strong {{
     color:
         #ffd18a;
 }}
-
 
 .discord-button {{
     display: inline-block;
@@ -479,7 +441,6 @@ h1 {{
         box-shadow 0.2s ease;
 }}
 
-
 .discord-button:hover {{
     transform:
         translateY(-3px);
@@ -490,11 +451,6 @@ h1 {{
         35px
         rgba(88, 101, 242, 0.45);
 }}
-
-
-/* =========================================================
-   DERNIÈRE MISE À JOUR
-   ========================================================= */
 
 .update {{
     margin-top: 28px;
@@ -511,12 +467,10 @@ h1 {{
     font-size: 13px;
 }}
 
-
 .update strong {{
     color:
         #d1d5dc;
 }}
-
 
 .footer {{
     margin-top: 8px;
@@ -526,11 +480,6 @@ h1 {{
 
     font-size: 12px;
 }}
-
-
-/* =========================================================
-   VERSION TÉLÉPHONE
-   ========================================================= */
 
 @media
 (max-width: 700px) {{
@@ -544,12 +493,10 @@ h1 {{
             scroll;
     }}
 
-
     .card {{
         border-radius:
             20px;
     }}
-
 
     .header {{
         padding:
@@ -559,12 +506,10 @@ h1 {{
             20px;
     }}
 
-
     .logo {{
         width:
             155px;
     }}
-
 
     .stats {{
         grid-template-columns:
@@ -578,13 +523,11 @@ h1 {{
             15px;
     }}
 
-
     .stat {{
         padding:
             23px
             15px;
     }}
-
 
     .bottom {{
         padding:
@@ -593,7 +536,6 @@ h1 {{
             28px
             20px;
     }}
-
 
     .discord-button {{
         width:
@@ -635,13 +577,7 @@ Serveur Discord de Legodingo13
 </div>
 
 <p class="description">
-
-Communauté francophone autour de Legodingo13
-et de Forge of Empires.
-
-Rejoins les joueurs du serveur pour discuter,
-échanger et partager autour du jeu.
-
+Le plus gros serveur communautaire francophone autour de Forge of Empires. Rejoins la communauté pour bénéficier des meilleures aides et de la meilleure activité de la communauté francophone de Forge of Empires !
 </p>
 
 </div>
@@ -759,7 +695,7 @@ with open(
 
 
 # =========================================================
-# COPIE DE L'IMAGE DE FOND ET DU LOGO
+# COPIE DU FOND ET DU LOGO
 # =========================================================
 
 images = [
@@ -781,7 +717,7 @@ for image in images:
 
 
 # =========================================================
-# PETIT FICHIER DE SUIVI
+# FICHIER DE SUIVI
 # =========================================================
 
 with open(
