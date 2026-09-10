@@ -285,6 +285,7 @@ h2 { margin: 10px 0 16px; }
 .foe-logo { width:90px; height:70px; }
 .guns-logo { width:92px; height:92px; }
 .server-logo-small { width:100px; height:auto; }
+.profile-tableau-logo { width:110px; height:110px; object-fit:contain; }
 .tile-title { font-size:19px; font-weight:700; margin-bottom:7px; }
 .tile-detail { color:#c4c9d2; font-size:14px; line-height:1.45; }
 .tile-count { color:#ffd493; font-size:25px; font-weight:800; margin-bottom:7px; }
@@ -382,18 +383,19 @@ home_body = f"""
 <h1>Legodingo13</h1>
 <p class="lead">
 Bienvenue sur le site de la communauté Legodingo13 autour de Forge of Empires.
-Retrouve ici le serveur Discord, la chaîne YouTube, le profil Legodingo13
-et le tableau communautaire mis à jour depuis l'application du bot.
+Retrouve ici le serveur Discord, la chaîne YouTube, le site officiel de Forge of Empires,
+le tableau Excel des mondes FOE et la page guns.lol de Legodingo13.
 </p>
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur Discord</span></div>
     <div class="stat"><span class="number">{youtube_subscribers}</span><span class="label">abonnés sur YouTube</span></div>
 </div>
-<div class="grid two">
+<div class="grid">
     <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
-    <a class="tile" href="profil.html"><img src="guns.png" class="tile-logo guns-logo" alt="Profil Legodingo13"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Les liens officiels et le profil de Legodingo13.</div></a>
-    <a class="tile" href="tableau.html"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Tableau Forge of Empires"><div class="tile-title">Tableau communautaire</div><div class="tile-detail">Consulter la dernière version publiée depuis l'application Legodingo13 Bot4.</div></a>
+    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu.</div></a>
+    <a class="tile" href="tableau.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
+    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
 """
 shell(
@@ -445,6 +447,11 @@ youtube_body = f"""
     <div class="stat"><span class="number">FOE</span><span class="label">contenus Forge of Empires</span></div>
 </div>
 <a class="primary-button" href="{YOUTUBE_URL}" target="_blank" rel="noopener noreferrer">Ouvrir la chaîne YouTube</a>
+<div class="grid">
+    <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Accéder à la page du serveur Discord Legodingo13</div></a>
+    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
+    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13</div></a>
+</div>
 """
 shell(
     "youtube.html",
@@ -543,6 +550,7 @@ assets = [
     "Youtube.png",
     "foe_logo.png",
     "guns.png",
+    "profil_tableau.png",
     "cursor_default.cur",
     "cursor_hover.cur",
     "tableau.png",
