@@ -44,6 +44,7 @@ def read_previous_youtube_count():
         return None
 
     try:
+
         with open(
             "last-update.txt",
             "r",
@@ -115,7 +116,6 @@ def get_youtube_subscribers():
             r"with\s*"
             r"([\d,\s]+)\s*subscribers"
             r"\s+and\s+[\d,\s]+\s+videos"
-
         ]
 
         for pattern in patterns:
@@ -145,7 +145,6 @@ def get_youtube_subscribers():
             r'"subscriberCount"\s*:\s*"?(\d+)"?',
             r'"subscribers"\s*:\s*"?(\d+)"?',
             r'"subscriber_count"\s*:\s*"?(\d+)"?'
-
         ]
 
         for pattern in json_patterns:
@@ -409,8 +408,7 @@ body {{
         1px solid
         rgba(255, 210, 130, 0.23);
 
-    border-radius:
-        28px;
+    border-radius: 28px;
 
     overflow: hidden;
 
@@ -467,6 +465,7 @@ body {{
 
     width: 190px;
     max-width: 75%;
+
     height: auto;
 
     display: block;
@@ -509,6 +508,7 @@ body {{
     color: #ffd69a;
 
     font-size: 13px;
+
     font-weight: bold;
 
     letter-spacing: 1px;
@@ -543,6 +543,7 @@ h1 {{
     color: #ffd493;
 
     font-size: 22px;
+
     font-weight: bold;
 }}
 
@@ -560,12 +561,13 @@ h1 {{
     color: #e7e3df;
 
     font-size: 16px;
+
     line-height: 1.7;
 }}
 
 
 /* =========================================================
-   STATISTIQUES
+   STATISTIQUES DISCORD
    ========================================================= */
 
 .stats {{
@@ -691,6 +693,7 @@ h1 {{
     color: #f2f2f2;
 
     font-size: 17px;
+
     line-height: 1.7;
 }}
 
@@ -716,6 +719,7 @@ h1 {{
     color: white;
 
     font-size: 17px;
+
     font-weight: bold;
 
     background:
@@ -790,7 +794,7 @@ h1 {{
 
 .link-card {{
 
-    min-height: 190px;
+    min-height: 205px;
 
     padding:
         24px
@@ -805,7 +809,11 @@ h1 {{
     text-align: center;
 
     display: flex;
+
     flex-direction: column;
+
+    align-items: center;
+
     justify-content: center;
 
     background:
@@ -824,7 +832,8 @@ h1 {{
 
 .link-card:hover {{
 
-    transform: translateY(-4px);
+    transform:
+        translateY(-4px);
 
     background:
         rgba(255, 255, 255, 0.09);
@@ -834,59 +843,20 @@ h1 {{
 }}
 
 
-.link-icon {{
-
-    width: 52px;
-    height: 52px;
-
-    margin:
-        0
-        auto
-        14px
-        auto;
-
-    border-radius: 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 21px;
-    font-weight: 800;
-}}
-
-
-.youtube-icon {{
-    background: #ff0033;
-}}
-
-
-.guns-icon {{
-
-    background:
-        linear-gradient(
-            145deg,
-            #7d49df,
-            #4c2c8e
-        );
-}}
-
-
 /* =========================================================
-   LOGO FORGE OF EMPIRES
+   LOGOS DES BOUTONS
    ========================================================= */
 
-.foe-logo {{
-
-    width: 90px;
-    height: auto;
+.button-logo {{
 
     display: block;
 
+    object-fit: contain;
+
     margin:
         0
         auto
-        12px
+        13px
         auto;
 
     filter:
@@ -894,7 +864,7 @@ h1 {{
             0
             5px
             10px
-            rgba(0, 0, 0, 0.40)
+            rgba(0, 0, 0, 0.35)
         );
 
     transition:
@@ -902,10 +872,34 @@ h1 {{
 }}
 
 
-.link-card:hover .foe-logo {{
+.youtube-logo {{
+
+    width: 92px;
+
+    height: 58px;
+}}
+
+
+.foe-logo {{
+
+    width: 90px;
+
+    height: 70px;
+}}
+
+
+.guns-logo {{
+
+    width: 92px;
+
+    height: 92px;
+}}
+
+
+.link-card:hover .button-logo {{
 
     transform:
-        scale(1.07);
+        scale(1.08);
 }}
 
 
@@ -914,6 +908,7 @@ h1 {{
     margin-bottom: 9px;
 
     font-size: 19px;
+
     font-weight: bold;
 }}
 
@@ -925,6 +920,7 @@ h1 {{
     color: #ffd493;
 
     font-size: 24px;
+
     font-weight: 800;
 }}
 
@@ -934,6 +930,7 @@ h1 {{
     color: #c4c9d2;
 
     font-size: 14px;
+
     line-height: 1.45;
 }}
 
@@ -977,7 +974,7 @@ h1 {{
 
 
 /* =========================================================
-   TÉLÉPHONE
+   VERSION TÉLÉPHONE
    ========================================================= */
 
 @media
@@ -995,6 +992,7 @@ h1 {{
 
 
     .card {{
+
         border-radius: 20px;
     }}
 
@@ -1010,6 +1008,7 @@ h1 {{
 
 
     .logo {{
+
         width: 155px;
     }}
 
@@ -1037,6 +1036,7 @@ h1 {{
 
 
     .discord-button {{
+
         width: 100%;
     }}
 
@@ -1052,12 +1052,14 @@ h1 {{
 
 
     .links-grid {{
+
         grid-template-columns: 1fr;
     }}
 
 
     .link-card {{
-        min-height: 155px;
+
+        min-height: 175px;
     }}
 
 
@@ -1084,6 +1086,7 @@ h1 {{
 
 
 <div class="header">
+
 
 <img
     src="logo.png"
@@ -1201,6 +1204,8 @@ Retrouve Legodingo13
 <div class="links-grid">
 
 
+<!-- YOUTUBE -->
+
 <a
     class="link-card"
     href="{YOUTUBE_URL}"
@@ -1208,9 +1213,11 @@ Retrouve Legodingo13
     rel="noopener noreferrer"
 >
 
-<div class="link-icon youtube-icon">
-▶
-</div>
+<img
+    src="Youtube.png"
+    alt="Logo YouTube"
+    class="button-logo youtube-logo"
+>
 
 <div class="link-name">
 YouTube
@@ -1227,6 +1234,8 @@ Chaîne YouTube Legodingo13
 </a>
 
 
+<!-- FORGE OF EMPIRES -->
+
 <a
     class="link-card"
     href="{FOE_URL}"
@@ -1236,8 +1245,8 @@ Chaîne YouTube Legodingo13
 
 <img
     src="foe_logo.png"
-    alt="Logo officiel Forge of Empires"
-    class="foe-logo"
+    alt="Logo Forge of Empires"
+    class="button-logo foe-logo"
 >
 
 <div class="link-name">
@@ -1251,6 +1260,8 @@ Accéder au site officiel francophone du jeu
 </a>
 
 
+<!-- GUNS.LOL -->
+
 <a
     class="link-card"
     href="{GUNS_URL}"
@@ -1258,9 +1269,11 @@ Accéder au site officiel francophone du jeu
     rel="noopener noreferrer"
 >
 
-<div class="link-icon guns-icon">
-L13
-</div>
+<img
+    src="guns.png"
+    alt="Logo guns.lol de Legodingo13"
+    class="button-logo guns-logo"
+>
 
 <div class="link-name">
 guns.lol
@@ -1323,13 +1336,18 @@ with open(
 
 
 # =========================================================
-# COPIE DES FICHIERS
+# COPIE DE TOUS LES FICHIERS
 # =========================================================
 
 assets = [
+
     "fond.png",
     "logo.png",
+
+    "Youtube.png",
     "foe_logo.png",
+    "guns.png",
+
     "cursor_default.cur",
     "cursor_hover.cur"
 ]
