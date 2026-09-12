@@ -1,4 +1,4 @@
-import urllib.request
+=import urllib.request
 import json
 import html
 import os
@@ -562,6 +562,11 @@ def shell(filename, active, title, description, body):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Icône affichée dans l'onglet du navigateur -->
+<link rel="icon" type="image/png" href="logo.png?v=2">
+<link rel="shortcut icon" type="image/png" href="logo.png?v=2">
+<link rel="apple-touch-icon" href="logo.png?v=2">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
 <meta name="robots" content="index, follow">
