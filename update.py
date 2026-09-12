@@ -1,4 +1,4 @@
-=import urllib.request
+import urllib.request
 import json
 import html
 import os
