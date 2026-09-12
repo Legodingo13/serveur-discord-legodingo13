@@ -564,9 +564,10 @@ def shell(filename, active, title, description, body):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Icône affichée dans l'onglet du navigateur -->
-<link rel="icon" type="image/png" href="onglet_logo.png?v=3">
-<link rel="shortcut icon" type="image/png" href="onglet_logo.png?v=3">
-<link rel="apple-touch-icon" href="onglet_logo.png?v=3">
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=4">
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=4">
+<link rel="icon" type="image/png" sizes="32x32" href="onglet_logo_optimise.png?v=4">
+<link rel="apple-touch-icon" href="onglet_logo_optimise.png?v=4">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
 <meta name="robots" content="index, follow">
@@ -899,6 +900,8 @@ assets = [
     "fond.png",
     "logo.png",
     "onglet_logo.png",
+    "onglet_logo_optimise.png",
+    "favicon.ico",
     "Youtube.png",
     "foe_logo.png",
     "guns.png",
