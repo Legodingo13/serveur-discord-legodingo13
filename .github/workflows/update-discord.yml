@@ -14,6 +14,9 @@ on:
       - "update.py"
       - "fond.png"
       - "logo.png"
+      - "onglet_logo.png"
+      - "onglet_logo_optimise.png"
+      - "favicon.ico"
       - "Youtube.png"
       - "foe_logo.png"
       - "guns.png"
@@ -32,7 +35,7 @@ on:
       - ".github/workflows/update-discord.yml"
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -49,8 +52,6 @@ jobs:
 
       - name: Récupérer les fichiers
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - name: Installer Python
         uses: actions/setup-python@v7
@@ -59,45 +60,6 @@ jobs:
 
       - name: Générer toutes les pages du site
         run: python update.py
-
-      - name: Enregistrer les nouvelles statistiques
-        shell: bash
-        run: |
-          set -e
-
-          git config user.name "site-legodingo13-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add last-update.txt
-
-          if git diff --cached --quiet; then
-            echo "Aucune nouvelle statistique à enregistrer."
-            exit 0
-          fi
-
-          git commit -m "Mise à jour automatique des statistiques"
-
-          # Le PC peut envoyer tableau.png pendant que GitHub Actions travaille.
-          # On récupère donc les éventuels nouveaux commits avant le push.
-          for tentative in 1 2 3 4 5
-          do
-            echo "Tentative de synchronisation Git n°${tentative}..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            if git push origin HEAD:main
-            then
-              echo "Statistiques enregistrées sur GitHub."
-              exit 0
-            fi
-
-            echo "Le dépôt a encore changé. Nouvelle tentative dans 2 secondes..."
-            sleep 2
-          done
-
-          echo "Impossible d'envoyer les statistiques après 5 tentatives."
-          exit 1
 
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v6
