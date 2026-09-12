@@ -564,9 +564,9 @@ def shell(filename, active, title, description, body):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Icône affichée dans l'onglet du navigateur -->
-<link rel="icon" type="image/png" href="logo.png?v=2">
-<link rel="shortcut icon" type="image/png" href="logo.png?v=2">
-<link rel="apple-touch-icon" href="logo.png?v=2">
+<link rel="icon" type="image/png" href="onglet_logo.png?v=3">
+<link rel="shortcut icon" type="image/png" href="onglet_logo.png?v=3">
+<link rel="apple-touch-icon" href="onglet_logo.png?v=3">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
 <meta name="robots" content="index, follow">
@@ -898,6 +898,7 @@ with open("_site/sitemap.xml", "w", encoding="utf-8") as f:
 assets = [
     "fond.png",
     "logo.png",
+    "onglet_logo.png",
     "Youtube.png",
     "foe_logo.png",
     "guns.png",
