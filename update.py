@@ -257,6 +257,15 @@ h2 { margin: 10px 0 16px; }
 .gold { color: #ffd493; }
 .lead { max-width: 820px; margin: 18px auto 28px; color: #e7e3df; font-size: 16px; line-height: 1.7; }
 
+.discord-presentation-image {
+    display: block;
+    width: min(100%, 980px);
+    height: auto;
+    margin: 10px auto 28px;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(0,0,0,.38);
+}
+
 .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin: 26px 0; }
 .stat {
     padding: 30px 20px;
@@ -429,6 +438,8 @@ h2 { margin: 10px 0 16px; }
         display: none;
     }
 }
+
+.discord-presentation-image { border-radius: 18px; }
 
 @media (max-width:760px) {
     body { padding:18px 10px; background-attachment:scroll; }
@@ -776,6 +787,7 @@ Le plus gros serveur communautaire francophone autour de Forge of Empires.
 Rejoins la communauté pour bénéficier des meilleures aides et de la meilleure activité
 de la communauté francophone de Forge of Empires !
 </p>
+<img src="discord_presentation_1.png" class="discord-presentation-image" alt="Présentation visuelle du serveur Discord Legodingo13 - Serv FOE FR">
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur</span></div>
     <div class="stat"><span class="number">{online_count}</span><span class="label"><span class="online-dot"></span>membres actuellement en ligne</span></div>
@@ -907,6 +919,7 @@ assets = [
     "guns.png",
     "profil_tableau.png",
     "roi_chute.png",
+    "discord_presentation_1.png",
 
     # Logos des sites tiers
     "forgedb.png",
