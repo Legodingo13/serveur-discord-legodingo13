@@ -20,27 +20,6 @@ SOCIALCOUNTS_URL = (
 )
 FOE_URL = "https://fr0.forgeofempires.com/page/"
 GUNS_URL = "https://guns.lol/legodingo13"
-
-# Sites tiers Forge of Empires
-FOE_WIKI_URL = "https://fr.wiki.forgeofempires.com/index.php?title=Accueil"
-FORGEDB_URL = "https://foestats.com/"
-FOE_SCOREDB_URL = "https://foe.scoredb.io/Worlds"
-FOE_DATA_URL = "https://foe-data.ovh/"
-BANANA_DB_URL = "https://foe-buildings-database.streamlit.app/"
-FOE_TOOLS_URL = "https://foe.tools/fr/"
-
-# Extensions
-FOE_HAMMER_URL = "https://chromewebstore.google.com/detail/forge-hammer/kmicglnhmpaebfcoiojigbnepklclboa?hl=fr"
-FOE_HELPER_URL = "https://foe-helper.com/"
-
-# Chaînes YouTube tierces
-UBERNERD14_URL = "https://www.youtube.com/@UBERnerd14"
-SENSHI_URL = "https://www.youtube.com/@drikanorrin9697"
-PIXELPULSE_URL = "https://www.youtube.com/@PixelVibes63"
-MOOINGCAT_URL = "https://www.youtube.com/@MooingCatFoE"
-GUIGEEKS_URL = "https://www.youtube.com/@GuigeekX"
-ZOUMA_URL = "https://www.youtube.com/@PassionFoeforgeofempire"
-
 SITE_BASE = "https://legodingo13.github.io/serveur-discord-legodingo13/"
 
 # Nous ajouterons la vraie balise Google Search Console plus tard.
@@ -257,15 +236,6 @@ h2 { margin: 10px 0 16px; }
 .gold { color: #ffd493; }
 .lead { max-width: 820px; margin: 18px auto 28px; color: #e7e3df; font-size: 16px; line-height: 1.7; }
 
-.discord-presentation-image {
-    display: block;
-    width: min(100%, 980px);
-    height: auto;
-    margin: 10px auto 28px;
-    border-radius: 24px;
-    box-shadow: 0 18px 45px rgba(0,0,0,.38);
-}
-
 .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin: 26px 0; }
 .stat {
     padding: 30px 20px;
@@ -275,6 +245,13 @@ h2 { margin: 10px 0 16px; }
 }
 .number { display: block; margin-bottom: 9px; font-size: clamp(42px,6vw,62px); line-height: 1; font-weight: 800; }
 .label { color: #d4d7de; font-size: 16px; }
+
+.discord-showcase-image {
+    display: block;
+    width: min(100%, 920px);
+    height: auto;
+    margin: 28px auto 18px;
+}
 .online-dot { display:inline-block; width:10px; height:10px; margin-right:7px; border-radius:50%; background:#3ba55d; box-shadow:0 0 8px rgba(59,165,93,.8); }
 
 .primary-button {
@@ -316,46 +293,6 @@ h2 { margin: 10px 0 16px; }
 .guns-logo { width:92px; height:92px; }
 .server-logo-small { width:100px; height:auto; }
 .profile-tableau-logo { width:110px; height:110px; object-fit:contain; }
-
-.section-block { margin-top: 44px; }
-.section-block:first-of-type { margin-top: 30px; }
-.section-title {
-    margin: 0 0 8px;
-    font-size: 28px;
-    color: #ffffff;
-}
-.section-subtitle {
-    max-width: 820px;
-    margin: 0 auto 18px;
-    color: #bfc5cf;
-    font-size: 14px;
-    line-height: 1.55;
-}
-.third-party-logo {
-    width: 96px;
-    height: 88px;
-    object-fit: contain;
-}
-.third-party-logo.wide {
-    width: 108px;
-    height: 82px;
-}
-.third-party-logo.small {
-    width: 82px;
-    height: 82px;
-}
-.external-badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 9px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,212,147,.22);
-    background: rgba(255,212,147,.07);
-    color: #d9c39f;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .35px;
-}
 .tile-title { font-size:19px; font-weight:700; margin-bottom:7px; }
 .tile-detail { color:#c4c9d2; font-size:14px; line-height:1.45; }
 .tile-count { color:#ffd493; font-size:25px; font-weight:800; margin-bottom:7px; }
@@ -375,78 +312,11 @@ h2 { margin: 10px 0 16px; }
 .footer { margin: 0 38px; padding: 23px 0 30px; border-top:1px solid rgba(255,255,255,.08); text-align:center; color:#aeb4bf; font-size:13px; }
 .footer small { color:#7f8794; }
 
-/* =========================================================
-   LOGO CLIQUABLE + ROI QUI TOMBE
-   ========================================================= */
-
-.logo-zone {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0 14px 0;
-}
-
-.logo-trigger {
-    display: block;
-    flex: 0 0 165px;
-    width: 165px;
-    max-width: 72%;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    background: transparent;
-    line-height: 0;
-}
-
-.logo-trigger .logo {
-    display: block;
-    width: 100%;
-    max-width: none;
-    height: auto;
-    margin: 0;
-    transition: transform .18s ease, filter .18s ease;
-}
-
-.logo-trigger:hover .logo {
-    transform: scale(1.045);
-    filter:
-        drop-shadow(0 8px 15px rgba(0,0,0,.42))
-        drop-shadow(0 0 12px rgba(255,184,82,.22));
-}
-
-.logo-trigger:active .logo {
-    transform: scale(.98);
-}
-
-.falling-king {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: clamp(125px, 15vw, 230px);
-    height: auto;
-    z-index: 99999;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-drag: none;
-    will-change: transform, opacity;
-    filter: drop-shadow(0 12px 18px rgba(0,0,0,.38));
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .falling-king {
-        display: none;
-    }
-}
-
-.discord-presentation-image { border-radius: 18px; }
-
 @media (max-width:760px) {
     body { padding:18px 10px; background-attachment:scroll; }
     .card { border-radius:20px; }
     .site-head { padding:25px 16px 12px; }
     .logo { width:145px; }
-    .logo-trigger { flex-basis:145px; width:145px; }
     .nav { gap:7px; }
     .nav a { flex:1 1 calc(50% - 8px); padding:10px 8px; }
     .content { padding:15px 18px 28px; }
@@ -454,96 +324,6 @@ h2 { margin: 10px 0 16px; }
     .tile { min-height:155px; }
     .footer { margin:0 18px; }
 }
-"""
-
-SCRIPT = r"""
-<script>
-(function () {
-    const trigger = document.getElementById("logoKingTrigger");
-
-    if (!trigger) return;
-
-    trigger.addEventListener("click", function () {
-        if (document.querySelector(".falling-king")) return;
-
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-        const king = document.createElement("img");
-        king.src = "roi_chute.png";
-        king.alt = "";
-        king.className = "falling-king";
-        king.setAttribute("aria-hidden", "true");
-        document.body.appendChild(king);
-
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const size = Math.min(230, Math.max(125, vw * 0.15));
-
-        const animation = king.animate(
-            [
-                {
-                    transform: `translate(${-size * 0.85}px, ${-size * 1.15}px) rotate(-28deg)`,
-                    opacity: 0,
-                    offset: 0
-                },
-                {
-                    transform: `translate(${vw * 0.02}px, ${vh * 0.02}px) rotate(18deg)`,
-                    opacity: 1,
-                    offset: 0.08
-                },
-                {
-                    transform: `translate(${vw * 0.16}px, ${vh * 0.17}px) rotate(-22deg)`,
-                    opacity: 1,
-                    offset: 0.20
-                },
-                {
-                    transform: `translate(${vw * 0.25}px, ${vh * 0.31}px) rotate(25deg)`,
-                    opacity: 1,
-                    offset: 0.34
-                },
-                {
-                    transform: `translate(${vw * 0.43}px, ${vh * 0.43}px) rotate(-20deg)`,
-                    opacity: 1,
-                    offset: 0.48
-                },
-                {
-                    transform: `translate(${vw * 0.53}px, ${vh * 0.58}px) rotate(21deg)`,
-                    opacity: 1,
-                    offset: 0.62
-                },
-                {
-                    transform: `translate(${vw * 0.71}px, ${vh * 0.70}px) rotate(-17deg)`,
-                    opacity: 1,
-                    offset: 0.76
-                },
-                {
-                    transform: `translate(${vw * 0.82}px, ${vh * 0.87}px) rotate(19deg)`,
-                    opacity: 1,
-                    offset: 0.89
-                },
-                {
-                    transform: `translate(${vw + size * 0.85}px, ${vh + size * 0.65}px) rotate(-12deg)`,
-                    opacity: 0,
-                    offset: 1
-                }
-            ],
-            {
-                duration: 5200,
-                easing: "ease-in-out",
-                fill: "forwards"
-            }
-        );
-
-        animation.onfinish = function () {
-            king.remove();
-        };
-
-        animation.oncancel = function () {
-            king.remove();
-        };
-    });
-})();
-</script>
 """
 
 
@@ -573,12 +353,6 @@ def shell(filename, active, title, description, body):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Icône affichée dans l'onglet du navigateur -->
-<link rel="icon" type="image/x-icon" href="favicon.ico?v=4">
-<link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=4">
-<link rel="icon" type="image/png" sizes="32x32" href="onglet_logo_optimise.png?v=4">
-<link rel="apple-touch-icon" href="onglet_logo_optimise.png?v=4">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
 <meta name="robots" content="index, follow">
@@ -590,17 +364,7 @@ def shell(filename, active, title, description, body):
 <main class="page">
 <section class="card">
 <header class="site-head">
-    <div class="logo-zone">
-        <button
-            type="button"
-            class="logo-trigger"
-            id="logoKingTrigger"
-            aria-label="Faire tomber le roi Legodingo13"
-            title="Clique sur le logo"
-        >
-            <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
-        </button>
-    </div>
+    <img src="logo.png" alt="Logo du serveur Discord Legodingo13" class="logo">
     <div class="badge">COMMUNAUTÉ LEGODINGO13</div>
     <nav class="nav" aria-label="Navigation principale">{navigation(active)}</nav>
 </header>
@@ -611,7 +375,6 @@ def shell(filename, active, title, description, body):
 </footer>
 </section>
 </main>
-{SCRIPT}
 </body>
 </html>"""
 
@@ -619,8 +382,6 @@ def shell(filename, active, title, description, body):
         f.write(page)
 
 
-if os.path.exists("_site"):
-    shutil.rmtree("_site")
 os.makedirs("_site", exist_ok=True)
 
 
@@ -629,18 +390,13 @@ home_body = f"""
 <h1>Legodingo13</h1>
 <p class="lead">
 Bienvenue sur le site de la communauté Legodingo13 autour de Forge of Empires.
-Retrouve ici mes liens officiels, puis une sélection de sites, extensions et chaînes YouTube tierces utiles à la communauté Forge of Empires.
+Retrouve ici le serveur Discord, la chaîne YouTube, le site officiel de Forge of Empires,
+le tableau Excel des mondes FOE et la page guns.lol de Legodingo13.
 </p>
-
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur Discord</span></div>
     <div class="stat"><span class="number">{youtube_subscribers}</span><span class="label">abonnés sur YouTube</span></div>
 </div>
-
-<section class="section-block">
-<h2 class="section-title">Liens Legodingo13</h2>
-<p class="section-subtitle">Mes pages, mon serveur et les accès directement liés à la communauté Legodingo13.</p>
-
 <div class="grid">
     <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
@@ -648,126 +404,6 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
     <a class="tile" href="profil.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
     <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
-</section>
-
-<section class="section-block">
-<h2 class="section-title">Sites tiers</h2>
-<p class="section-subtitle">Outils, bases de données et ressources externes consacrés à Forge of Empires.</p>
-
-<div class="grid">
-    <a class="tile" href="{FOE_WIKI_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_logo.png" class="tile-logo foe-logo" alt="Wiki Forge of Empires">
-        <div class="tile-title">Wiki Forge of Empires</div>
-        <div class="tile-detail">Wiki francophone consacré à Forge of Empires.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-
-    <a class="tile" href="{FORGEDB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="forgedb.png" class="tile-logo third-party-logo" alt="ForgeDB">
-        <div class="tile-title">ForgeDB</div>
-        <div class="tile-detail">Base de données et statistiques autour de Forge of Empires.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-
-    <a class="tile" href="{FOE_SCOREDB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_scoredb.png" class="tile-logo third-party-logo small" alt="FOE ScoreDB">
-        <div class="tile-title">FOE ScoreDB</div>
-        <div class="tile-detail">Base de données et classements Forge of Empires.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-
-    <a class="tile" href="{FOE_DATA_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_data.png" class="tile-logo third-party-logo" alt="FOE Data">
-        <div class="tile-title">FOE Data</div>
-        <div class="tile-detail">Base de données consacrée à Forge of Empires.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-
-    <a class="tile" href="{BANANA_DB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="banana_db.png" class="tile-logo third-party-logo" alt="Born To Be A Banana">
-        <div class="tile-title">Born To Be A Banana</div>
-        <div class="tile-detail">Base de données consacrée aux bâtiments de Forge of Empires.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-
-    <a class="tile" href="{FOE_TOOLS_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_tools.png" class="tile-logo third-party-logo" alt="FOE Tools">
-        <div class="tile-title">FOE Tools</div>
-        <div class="tile-detail">Assistant pour calculer les places et investissements des Grands Monuments.</div>
-        <div class="external-badge">SITE TIERS</div>
-    </a>
-</div>
-</section>
-
-<section class="section-block">
-<h2 class="section-title">Extensions du jeu</h2>
-<p class="section-subtitle">Extensions tierces utiles pour accompagner Forge of Empires dans le navigateur.</p>
-
-<div class="grid two">
-    <a class="tile" href="{FOE_HAMMER_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_hammer.png" class="tile-logo third-party-logo" alt="FOE Hammer">
-        <div class="tile-title">FOE Hammer</div>
-        <div class="tile-detail">Extension Chrome pour Forge of Empires.</div>
-        <div class="external-badge">EXTENSION TIERCE</div>
-    </a>
-
-    <a class="tile" href="{FOE_HELPER_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_helper.png" class="tile-logo third-party-logo" alt="FOE Helper">
-        <div class="tile-title">FOE Helper</div>
-        <div class="tile-detail">Extension et assistant communautaire pour Forge of Empires.</div>
-        <div class="external-badge">EXTENSION TIERCE</div>
-    </a>
-</div>
-</section>
-
-<section class="section-block">
-<h2 class="section-title">Chaînes YouTube tierces</h2>
-<p class="section-subtitle">Quelques chaînes YouTube consacrées à Forge of Empires.</p>
-
-<div class="grid">
-    <a class="tile" href="{UBERNERD14_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="ubernerd14.png" class="tile-logo third-party-logo" alt="UBERnerd14">
-        <div class="tile-title">UBERnerd14</div>
-        <div class="tile-detail">Le plus gros YouTuber Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-
-    <a class="tile" href="{SENSHI_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Senshi">
-        <div class="tile-title">Senshi</div>
-        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-
-    <a class="tile" href="{PIXELPULSE_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube PixelPulse">
-        <div class="tile-title">PixelPulse</div>
-        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-
-    <a class="tile" href="{MOOINGCAT_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube MooingCatFOE">
-        <div class="tile-title">MooingCatFOE</div>
-        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-
-    <a class="tile" href="{GUIGEEKS_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Guigeeks">
-        <div class="tile-title">Guigeeks</div>
-        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-
-    <a class="tile" href="{ZOUMA_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Zouma">
-        <div class="tile-title">Zouma</div>
-        <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
-        <div class="external-badge">CHAÎNE TIERCE</div>
-    </a>
-</div>
-</section>
 """
 shell(
     "index.html",
@@ -787,13 +423,13 @@ Le plus gros serveur communautaire francophone autour de Forge of Empires.
 Rejoins la communauté pour bénéficier des meilleures aides et de la meilleure activité
 de la communauté francophone de Forge of Empires !
 </p>
-<img src="discord_presentation_1.png" class="discord-presentation-image" alt="Présentation visuelle du serveur Discord Legodingo13 - Serv FOE FR">
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur</span></div>
     <div class="stat"><span class="number">{online_count}</span><span class="label"><span class="online-dot"></span>membres actuellement en ligne</span></div>
 </div>
 <p class="lead">Le serveur Discord de Legodingo13 compte actuellement <strong class="gold">{member_count} membres</strong>, dont environ <strong class="gold">{online_count} membres en ligne</strong>.</p>
 <a class="primary-button" href="https://discord.gg/{DISCORD_INVITE}" target="_blank" rel="noopener noreferrer">Rejoindre le serveur Discord</a>
+<img src="discord_presentation_2.png" class="discord-showcase-image" alt="Présentation des différentes parties du serveur Discord Legodingo13">
 <div class="grid">
     <a class="tile" href="{YOUTUBE_URL}" target="_blank" rel="noopener noreferrer"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Chaîne YouTube Legodingo13</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
@@ -870,14 +506,20 @@ shell(
 
 
 # TABLEAU - ANCIENNE URL CONSERVÉE POUR COMPATIBILITÉ
-# Même contenu que profil.html afin que TOUS les anciens liens affichent aussi le tableau Excel.
-shell(
-    "tableau.html",
-    "profil",
-    "Profil Legodingo13 - Tableau Excel des mondes FOE",
-    "Profil Legodingo13 : dernière version du tableau Excel des mondes Forge of Empires.",
-    profil_body,
-)
+# Les anciens liens vers tableau.html redirigent maintenant vers Profil Legodingo13.
+with open(os.path.join("_site", "tableau.html"), "w", encoding="utf-8") as f:
+    f.write("""<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="0; url=profil.html">
+<link rel="canonical" href="https://legodingo13.github.io/serveur-discord-legodingo13/profil.html">
+<title>Profil Legodingo13</title>
+</head>
+<body>
+<p>Redirection vers <a href="profil.html">Profil Legodingo13</a>...</p>
+</body>
+</html>""")
 
 
 # =========================================================
@@ -911,30 +553,10 @@ with open("_site/sitemap.xml", "w", encoding="utf-8") as f:
 assets = [
     "fond.png",
     "logo.png",
-    "onglet_logo.png",
-    "onglet_logo_optimise.png",
-    "favicon.ico",
     "Youtube.png",
     "foe_logo.png",
     "guns.png",
     "profil_tableau.png",
-    "roi_chute.png",
-    "discord_presentation_1.png",
-
-    # Logos des sites tiers
-    "forgedb.png",
-    "foe_scoredb.png",
-    "foe_data.png",
-    "banana_db.png",
-    "foe_tools.png",
-
-    # Logos des extensions
-    "foe_hammer.png",
-    "foe_helper.png",
-
-    # Logo de la chaîne UBERnerd14
-    "ubernerd14.png",
-
     "cursor_default.cur",
     "cursor_hover.cur",
     "tableau.png",
@@ -959,4 +581,4 @@ with open("last-update.txt", "w", encoding="utf-8") as f:
 
 print(f"Discord : {member_count} membres / {online_count} en ligne")
 print(f"YouTube via SocialCounts : {youtube_subscribers} abonnés")
-print("Pages générées : Accueil, Discord, YouTube, Profil Legodingo13 (tableau Excel), compatibilité tableau.html")
+print("Pages générées : accueil, Discord, YouTube, Profil, Tableau")
