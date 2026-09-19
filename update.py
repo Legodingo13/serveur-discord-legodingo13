@@ -813,7 +813,8 @@ h2 { margin: 10px 0 16px; }
 .tutorial-modal label { display:block; margin-bottom:7px; color:#dfe2e8; }
 .tutorial-modal input[type="password"],
 .tutorial-modal input[type="text"],
-.tutorial-modal input[type="url"] {
+.tutorial-modal input[type="url"],
+.tutorial-modal select {
     width: 100%;
     padding: 11px 12px;
     border: 1px solid rgba(255,255,255,.15);
@@ -821,6 +822,64 @@ h2 { margin: 10px 0 16px; }
     background: rgba(0,0,0,.23);
     color: white;
     outline: none;
+}
+.tutorial-modal select option {
+    background: #20232b;
+    color: white;
+}
+.tutorial-order-list {
+    display: grid;
+    gap: 8px;
+    max-height: min(52vh, 440px);
+    overflow: auto;
+    padding-right: 3px;
+}
+.tutorial-order-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 11px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.035);
+}
+.tutorial-order-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #eef0f4;
+    font-weight: 700;
+}
+.tutorial-order-buttons {
+    display: flex;
+    gap: 6px;
+}
+.tutorial-order-buttons button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+}
+.tutorial-order-buttons button:hover:not(:disabled) {
+    border-color: rgba(255,212,147,.38);
+    background: rgba(255,212,147,.09);
+}
+.tutorial-order-buttons button:disabled {
+    opacity: .28;
+    cursor: default !important;
+}
+.tutorial-order-help {
+    margin: -5px 0 14px;
+    color: #aeb4bf;
+    font-size: 13px;
+    line-height: 1.5;
 }
 .tutorial-modal-actions {
     display: flex;
@@ -1007,6 +1066,13 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
     const videoError = document.getElementById("tutorialVideoError");
     const videoAddButton = document.getElementById("tutorialVideoAdd");
     let videoTargetMenuId = null;
+
+    const deleteMenuModal = document.getElementById("tutorialDeleteMenuModal");
+    const deleteMenuSelect = document.getElementById("tutorialDeleteMenuSelect");
+    const deleteMenuContinue = document.getElementById("tutorialDeleteMenuContinue");
+
+    const orderMenuModal = document.getElementById("tutorialOrderMenuModal");
+    const orderMenuList = document.getElementById("tutorialOrderMenuList");
 
     function uid(prefix) {
         return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
@@ -1528,18 +1594,84 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
     }
 
     function deleteMenuRequest() {
-        if (!openMenuId) {
-            setStatus("Ouvre d'abord le menu déroulant à supprimer.", "error");
+        if (!tutorialData.menus.length) {
+            setStatus("Aucun menu déroulant à supprimer.", "error");
             return;
         }
-        const menu = findMenu(openMenuId);
-        if (!menu) return;
-        openConfirm("Supprimer un menu déroulant", `Supprimer « ${menu.title || "Menu sans titre"} » ? Cette action ne sera définitive qu'après l'enregistrement.`, "Supprimer", () => {
-            tutorialData.menus = tutorialData.menus.filter(item => item.id !== menu.id);
-            openMenuId = tutorialData.menus[0]?.id || null;
-            closeConfirm();
-            renderAdmin();
-            markDirty();
+        deleteMenuSelect.innerHTML = tutorialData.menus.map((menu, index) => {
+            const label = String(menu.title || "").trim() || `Menu sans titre ${index + 1}`;
+            return `<option value="${escapeHtml(menu.id)}">${escapeHtml(label)}</option>`;
+        }).join("");
+        if (openMenuId && tutorialData.menus.some(menu => menu.id === openMenuId)) {
+            deleteMenuSelect.value = openMenuId;
+        }
+        deleteMenuModal.hidden = false;
+        setTimeout(() => deleteMenuSelect.focus(), 20);
+    }
+
+    function closeDeleteMenuModal() {
+        deleteMenuModal.hidden = true;
+    }
+
+    function continueDeleteMenu() {
+        const menu = findMenu(deleteMenuSelect.value);
+        if (!menu) {
+            closeDeleteMenuModal();
+            setStatus("Le menu sélectionné est introuvable.", "error");
+            return;
+        }
+        closeDeleteMenuModal();
+        openConfirm(
+            "Supprimer un menu déroulant",
+            `Supprimer « ${menu.title || "Menu sans titre"} » ? Cette action ne sera définitive qu'après l'enregistrement.`,
+            "Supprimer",
+            () => {
+                tutorialData.menus = tutorialData.menus.filter(item => item.id !== menu.id);
+                if (openMenuId === menu.id) openMenuId = null;
+                closeConfirm();
+                renderAdmin();
+                markDirty();
+            }
+        );
+    }
+
+    function openOrderMenuModal() {
+        if (!tutorialData.menus.length) {
+            setStatus("Aucun menu déroulant à réorganiser.", "error");
+            return;
+        }
+        renderOrderMenuList();
+        orderMenuModal.hidden = false;
+    }
+
+    function closeOrderMenuModal() {
+        orderMenuModal.hidden = true;
+    }
+
+    function renderOrderMenuList() {
+        orderMenuList.innerHTML = tutorialData.menus.map((menu, index) => {
+            const label = String(menu.title || "").trim() || `Menu sans titre ${index + 1}`;
+            return `<div class="tutorial-order-row" data-order-row-id="${escapeHtml(menu.id)}">
+                <div class="tutorial-order-name">${escapeHtml(label)}</div>
+                <div class="tutorial-order-buttons">
+                    <button type="button" data-action="move-menu-up" data-menu-id="${escapeHtml(menu.id)}" title="Monter" aria-label="Monter ${escapeHtml(label)}" ${index === 0 ? "disabled" : ""}>↑</button>
+                    <button type="button" data-action="move-menu-down" data-menu-id="${escapeHtml(menu.id)}" title="Descendre" aria-label="Descendre ${escapeHtml(label)}" ${index === tutorialData.menus.length - 1 ? "disabled" : ""}>↓</button>
+                </div>
+            </div>`;
+        }).join("");
+
+        orderMenuList.querySelectorAll('[data-action="move-menu-up"], [data-action="move-menu-down"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const index = tutorialData.menus.findIndex(menu => menu.id === button.dataset.menuId);
+                if (index < 0) return;
+                const direction = button.dataset.action === "move-menu-up" ? -1 : 1;
+                const target = index + direction;
+                if (target < 0 || target >= tutorialData.menus.length) return;
+                [tutorialData.menus[index], tutorialData.menus[target]] = [tutorialData.menus[target], tutorialData.menus[index]];
+                renderOrderMenuList();
+                renderAdmin();
+                markDirty();
+            });
         });
     }
 
@@ -1674,8 +1806,14 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
 
     document.getElementById("tutorialCreateMenu").addEventListener("click", createMenuRequest);
     document.getElementById("tutorialDeleteMenu").addEventListener("click", deleteMenuRequest);
+    document.getElementById("tutorialReorderMenus").addEventListener("click", openOrderMenuModal);
     document.getElementById("tutorialSavePage").addEventListener("click", savePage);
     document.getElementById("tutorialQuitAdmin").addEventListener("click", quitAdmin);
+
+    deleteMenuContinue.addEventListener("click", continueDeleteMenu);
+    document.querySelectorAll('[data-close-delete-menu]').forEach(button => button.addEventListener("click", closeDeleteMenuModal));
+
+    document.querySelectorAll('[data-close-order-menu]').forEach(button => button.addEventListener("click", closeOrderMenuModal));
 
     confirmAccept.addEventListener("click", () => { if (confirmCallback) confirmCallback(); });
     confirmCancel.addEventListener("click", closeConfirm);
@@ -1997,6 +2135,7 @@ Retrouve ici les tutoriels et guides de jeu publiés par Legodingo13.
 <div id="tutorialAdminToolbar" class="tutorial-admin-toolbar" hidden>
     <button id="tutorialCreateMenu" type="button">Créer un menu déroulant</button>
     <button id="tutorialDeleteMenu" type="button">Supprimer un menu déroulant</button>
+    <button id="tutorialReorderMenus" type="button">Changer l’ordre des menus</button>
     <button id="tutorialSavePage" class="tutorial-save-button" type="button">Enregistrer les modifications de la page</button>
     <button id="tutorialQuitAdmin" type="button">Quitter la vue gestion de la page</button>
     <div id="tutorialAdminStatus" class="tutorial-admin-status"></div>
@@ -2023,6 +2162,31 @@ Retrouve ici les tutoriels et guides de jeu publiés par Legodingo13.
         <div class="tutorial-modal-actions">
             <button type="button" data-close-password>Annuler</button>
             <button id="tutorialPasswordValidate" class="primary" type="button">Valider</button>
+        </div>
+    </div>
+</div>
+
+<div id="tutorialDeleteMenuModal" class="tutorial-modal-overlay" hidden>
+    <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialDeleteMenuTitle">
+        <button type="button" class="tutorial-modal-close" data-close-delete-menu aria-label="Fermer">×</button>
+        <h3 id="tutorialDeleteMenuTitle">Choisir le menu à supprimer</h3>
+        <label for="tutorialDeleteMenuSelect">Menu déroulant :</label>
+        <select id="tutorialDeleteMenuSelect"></select>
+        <div class="tutorial-modal-actions">
+            <button type="button" data-close-delete-menu>Annuler</button>
+            <button id="tutorialDeleteMenuContinue" class="primary" type="button">Continuer</button>
+        </div>
+    </div>
+</div>
+
+<div id="tutorialOrderMenuModal" class="tutorial-modal-overlay" hidden>
+    <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialOrderMenuTitle">
+        <button type="button" class="tutorial-modal-close" data-close-order-menu aria-label="Fermer">×</button>
+        <h3 id="tutorialOrderMenuTitle">Changer l’ordre des menus</h3>
+        <p class="tutorial-order-help">Utilise les flèches pour déplacer chaque menu. Le nouvel ordre ne sera définitif qu’après « Enregistrer les modifications de la page ».</p>
+        <div id="tutorialOrderMenuList" class="tutorial-order-list"></div>
+        <div class="tutorial-modal-actions">
+            <button type="button" data-close-order-menu>Fermer</button>
         </div>
     </div>
 </div>
