@@ -441,6 +441,423 @@ h2 { margin: 10px 0 16px; }
 
 .discord-presentation-image { border-radius: 18px; }
 
+
+/* =========================================================
+   PAGE TUTORIELS DE JEU
+   ========================================================= */
+
+.tutorial-page-intro {
+    max-width: 820px;
+    margin: 0 auto 26px;
+    color: #cfd3dc;
+    line-height: 1.65;
+}
+
+.tutorial-accordion {
+    width: 100%;
+    max-width: 900px;
+    margin: 22px auto 0;
+    text-align: left;
+}
+
+.tutorial-empty {
+    padding: 34px 24px;
+    border: 1px dashed rgba(255,255,255,.16);
+    border-radius: 16px;
+    color: #aeb4bf;
+    text-align: center;
+    background: rgba(255,255,255,.025);
+}
+
+.tutorial-menu {
+    border-top: 1px solid rgba(255,255,255,.13);
+}
+.tutorial-menu:last-child {
+    border-bottom: 1px solid rgba(255,255,255,.13);
+}
+
+.tutorial-menu-header {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #f5f6f8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 17px 4px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.tutorial-menu-header:hover {
+    color: #ffd493;
+}
+
+.tutorial-menu-arrow {
+    flex: 0 0 auto;
+    font-size: 24px;
+    line-height: 1;
+    color: #bcc2cd;
+    transition: transform .18s ease;
+}
+.tutorial-menu.open .tutorial-menu-arrow { transform: rotate(90deg); }
+
+.tutorial-menu-panel {
+    display: none;
+    padding: 0 4px 24px;
+}
+.tutorial-menu.open .tutorial-menu-panel { display: block; }
+
+.tutorial-public-block + .tutorial-public-block { margin-top: 18px; }
+.tutorial-text {
+    color: #e5e8ee;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+.tutorial-text p { margin: 0 0 10px; }
+.tutorial-text img.tutorial-inline-emoji {
+    width: 1.25em;
+    height: 1.25em;
+    object-fit: contain;
+    vertical-align: -.23em;
+}
+.tutorial-content-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+.tutorial-video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
+}
+.tutorial-video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.tutorial-settings-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 34px auto 0;
+    min-height: 42px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.tutorial-settings-button {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.035);
+    color: #9098a5;
+    font-size: 17px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    opacity: .70;
+    transition: .18s ease;
+}
+.tutorial-settings-button:hover {
+    opacity: 1;
+    color: #ffd493;
+    border-color: rgba(255,212,147,.28);
+    background: rgba(255,212,147,.06);
+}
+.tutorial-settings-popover {
+    position: absolute;
+    right: 0;
+    bottom: 42px;
+    min-width: 170px;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(24,26,33,.98);
+    box-shadow: 0 15px 35px rgba(0,0,0,.45);
+    z-index: 30;
+}
+.tutorial-settings-popover[hidden] { display: none; }
+.tutorial-settings-popover button {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 9px;
+    border: 0;
+    background: rgba(255,255,255,.06);
+    color: white;
+    font-weight: 700;
+}
+.tutorial-settings-popover button:hover { background: rgba(255,255,255,.11); }
+
+.tutorial-admin-toolbar {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 22px;
+    padding: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    justify-content: center;
+    border-radius: 16px;
+    border: 1px solid rgba(255,196,108,.20);
+    background: rgba(255,196,108,.055);
+}
+.tutorial-admin-toolbar[hidden] { display: none; }
+.tutorial-admin-toolbar button {
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.065);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-weight: 700;
+}
+.tutorial-admin-toolbar button:hover {
+    border-color: rgba(255,212,147,.38);
+    background: rgba(255,212,147,.09);
+}
+.tutorial-admin-toolbar .tutorial-save-button {
+    background: linear-gradient(135deg,#c47a2b,#f0b45c);
+    color: #1b130d;
+    border-color: transparent;
+}
+.tutorial-admin-status {
+    flex: 1 1 100%;
+    min-height: 18px;
+    color: #c8ced8;
+    font-size: 13px;
+    text-align: center;
+}
+.tutorial-admin-status.error { color: #ff9c9c; }
+.tutorial-admin-status.success { color: #8fe0a6; }
+
+.tutorial-title-input {
+    width: 100%;
+    padding: 12px 13px;
+    margin: 2px 0 12px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 10px;
+    background: rgba(0,0,0,.19);
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    outline: none;
+}
+.tutorial-title-input:focus { border-color: rgba(255,196,108,.55); }
+
+.tutorial-add-blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 18px;
+}
+.tutorial-add-blocks button {
+    padding: 9px 12px;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color: white;
+    font-weight: 700;
+}
+
+.tutorial-admin-block {
+    position: relative;
+    padding: 13px;
+    margin-top: 13px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 13px;
+    background: rgba(255,255,255,.035);
+}
+.tutorial-block-remove {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.28);
+    color: #d9dde5;
+    z-index: 4;
+}
+.tutorial-block-remove:hover { color: #ffaaaa; border-color: rgba(255,120,120,.35); }
+
+.tutorial-editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-right: 35px;
+    margin-bottom: 9px;
+}
+.tutorial-editor-toolbar button,
+.tutorial-editor-toolbar select {
+    min-height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.24);
+    color: white;
+    padding: 5px 9px;
+}
+.tutorial-editor {
+    min-height: 105px;
+    padding: 12px;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,.11);
+    background: rgba(0,0,0,.17);
+    color: #eef0f4;
+    line-height: 1.65;
+    outline: none;
+}
+.tutorial-editor:focus { border-color: rgba(255,196,108,.42); }
+.tutorial-editor img.tutorial-inline-emoji {
+    width: 1.25em;
+    height: 1.25em;
+    object-fit: contain;
+    vertical-align: -.23em;
+}
+
+.tutorial-emoji-picker {
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 11px;
+    border: 1px solid rgba(255,255,255,.11);
+    background: rgba(15,17,23,.98);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+.tutorial-emoji-picker[hidden] { display: none; }
+.tutorial-emoji-button {
+    min-width: 34px;
+    height: 34px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.09);
+    background: rgba(255,255,255,.05);
+    font-size: 20px;
+    display: grid;
+    place-items: center;
+}
+.tutorial-emoji-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+.tutorial-emoji-import {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffd493;
+}
+
+.tutorial-admin-image-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 540px;
+    margin: 4px auto 0;
+    border-radius: 10px;
+}
+.tutorial-admin-video-preview {
+    color: #cbd1da;
+    padding: 8px 34px 3px 0;
+    overflow-wrap: anywhere;
+}
+
+.tutorial-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3,5,9,.72);
+    backdrop-filter: blur(5px);
+    z-index: 100100;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+}
+.tutorial-modal-overlay[hidden] { display: none; }
+.tutorial-modal {
+    position: relative;
+    width: min(100%, 480px);
+    border-radius: 18px;
+    border: 1px solid rgba(255,210,130,.24);
+    background: linear-gradient(145deg, rgba(26,29,38,.99), rgba(34,23,21,.99));
+    box-shadow: 0 30px 80px rgba(0,0,0,.64);
+    padding: 25px;
+    text-align: left;
+}
+.tutorial-modal h3 { margin: 0 40px 18px 0; font-size: 22px; }
+.tutorial-modal-close {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    color: white;
+    font-size: 19px;
+}
+.tutorial-modal label { display:block; margin-bottom:7px; color:#dfe2e8; }
+.tutorial-modal input[type="password"],
+.tutorial-modal input[type="text"],
+.tutorial-modal input[type="url"] {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 9px;
+    background: rgba(0,0,0,.23);
+    color: white;
+    outline: none;
+}
+.tutorial-modal-actions {
+    display: flex;
+    gap: 9px;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+.tutorial-modal-actions button {
+    padding: 10px 14px;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color: white;
+    font-weight: 700;
+}
+.tutorial-modal-actions .primary {
+    background: linear-gradient(135deg,#c47a2b,#f0b45c);
+    color: #1b130d;
+    border-color: transparent;
+}
+.tutorial-modal-message {
+    color: #cbd0d9;
+    line-height: 1.55;
+}
+.tutorial-modal-error {
+    min-height: 18px;
+    margin-top: 9px;
+    color: #ff9e9e;
+    font-size: 13px;
+}
+
+@media (max-width:760px) {
+    .tutorial-menu-header { font-size: 16px; }
+    .tutorial-admin-toolbar button { flex: 1 1 calc(50% - 9px); }
+    .tutorial-modal { padding: 21px 18px; }
+}
+
 @media (max-width:760px) {
     body { padding:18px 10px; background-attachment:scroll; }
     .card { border-radius:20px; }
@@ -547,6 +964,738 @@ SCRIPT = r"""
 """
 
 
+TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
+<script>
+(function () {
+    const DATA_URL = "tutoriels-data.json";
+    const REPO_OWNER = "Legodingo13";
+    const REPO_NAME = "serveur-discord-legodingo13";
+    const REPO_BRANCH = "main";
+    const DATA_PATH = "tutoriels-data.json";
+    const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_PATH}`;
+
+    const builtinEmojis = ["😀","😄","😂","❤️","👍","🎉","🔥","👑","🏰","⚔️","💬","📢","✅","❗","❓","🎯","🛠️","📷","🎬","🌟"];
+
+    let tutorialData = { version: 1, menus: [], customEmojis: [] };
+    let savedDataSnapshot = "";
+    let adminMode = false;
+    let adminToken = null;
+    let openMenuId = null;
+    let activeEditor = null;
+
+    const accordion = document.getElementById("tutorialAccordion");
+    const adminToolbar = document.getElementById("tutorialAdminToolbar");
+    const adminStatus = document.getElementById("tutorialAdminStatus");
+    const settingsButton = document.getElementById("tutorialSettingsButton");
+    const settingsPopover = document.getElementById("tutorialSettingsPopover");
+    const editPageButton = document.getElementById("tutorialEditPageButton");
+
+    const passwordModal = document.getElementById("tutorialPasswordModal");
+    const passwordInput = document.getElementById("tutorialPasswordInput");
+    const passwordError = document.getElementById("tutorialPasswordError");
+    const passwordValidate = document.getElementById("tutorialPasswordValidate");
+
+    const confirmModal = document.getElementById("tutorialConfirmModal");
+    const confirmTitle = document.getElementById("tutorialConfirmTitle");
+    const confirmText = document.getElementById("tutorialConfirmText");
+    const confirmAccept = document.getElementById("tutorialConfirmAccept");
+    const confirmCancel = document.getElementById("tutorialConfirmCancel");
+    let confirmCallback = null;
+
+    const videoModal = document.getElementById("tutorialVideoModal");
+    const videoUrlInput = document.getElementById("tutorialVideoUrlInput");
+    const videoError = document.getElementById("tutorialVideoError");
+    const videoAddButton = document.getElementById("tutorialVideoAdd");
+    let videoTargetMenuId = null;
+
+    function uid(prefix) {
+        return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+    }
+
+    function deepClone(value) {
+        return JSON.parse(JSON.stringify(value));
+    }
+
+    function setStatus(message, kind) {
+        if (!adminStatus) return;
+        adminStatus.textContent = message || "";
+        adminStatus.className = "tutorial-admin-status" + (kind ? " " + kind : "");
+    }
+
+    function dataChanged() {
+        return JSON.stringify(tutorialData) !== savedDataSnapshot;
+    }
+
+    function normalizeData(data) {
+        if (!data || typeof data !== "object") data = {};
+        if (!Array.isArray(data.menus)) data.menus = [];
+        if (!Array.isArray(data.customEmojis)) data.customEmojis = [];
+        data.version = 1;
+        data.menus.forEach(menu => {
+            if (!menu.id) menu.id = uid("menu");
+            if (typeof menu.title !== "string") menu.title = "";
+            if (!Array.isArray(menu.blocks)) menu.blocks = [];
+            menu.blocks.forEach(block => {
+                if (!block.id) block.id = uid("block");
+            });
+        });
+        return data;
+    }
+
+    async function loadTutorialData() {
+        try {
+            const response = await fetch(DATA_URL + "?v=" + Date.now(), { cache: "no-store" });
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            tutorialData = normalizeData(await response.json());
+        } catch (error) {
+            console.warn("Impossible de charger les tutoriels :", error);
+            tutorialData = normalizeData({ version: 1, menus: [], customEmojis: [] });
+        }
+        savedDataSnapshot = JSON.stringify(tutorialData);
+        render();
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function sanitizeRichHtml(htmlValue) {
+        const template = document.createElement("template");
+        template.innerHTML = String(htmlValue || "");
+        const allowed = new Set(["B","STRONG","I","EM","U","SPAN","BR","DIV","P","IMG"]);
+        const allowedStyles = new Set(["font-size","font-weight","font-style","text-decoration","text-align"]);
+
+        function clean(node) {
+            [...node.childNodes].forEach(child => {
+                if (child.nodeType === Node.ELEMENT_NODE) {
+                    if (!allowed.has(child.tagName)) {
+                        child.replaceWith(document.createTextNode(child.textContent || ""));
+                        return;
+                    }
+                    [...child.attributes].forEach(attr => {
+                        const name = attr.name.toLowerCase();
+                        if (child.tagName === "IMG") {
+                            if (name === "src") {
+                                if (!attr.value.startsWith("data:image/")) child.removeAttribute(attr.name);
+                            } else if (name === "class") {
+                                if (!attr.value.includes("tutorial-inline-emoji")) child.removeAttribute(attr.name);
+                            } else if (name !== "alt") {
+                                child.removeAttribute(attr.name);
+                            }
+                        } else if (name === "style") {
+                            const safe = [];
+                            attr.value.split(";").forEach(rule => {
+                                const parts = rule.split(":");
+                                if (parts.length < 2) return;
+                                const prop = parts.shift().trim().toLowerCase();
+                                const val = parts.join(":").trim();
+                                if (allowedStyles.has(prop)) safe.push(prop + ":" + val);
+                            });
+                            if (safe.length) child.setAttribute("style", safe.join(";"));
+                            else child.removeAttribute("style");
+                        } else {
+                            child.removeAttribute(attr.name);
+                        }
+                    });
+                    clean(child);
+                }
+            });
+        }
+        clean(template.content);
+        return template.innerHTML;
+    }
+
+    function youtubeId(url) {
+        const value = String(url || "").trim();
+        const patterns = [
+            /youtu\.be\/([A-Za-z0-9_-]{6,})/,
+            /youtube\.com\/watch\?[^#]*v=([A-Za-z0-9_-]{6,})/,
+            /youtube\.com\/shorts\/([A-Za-z0-9_-]{6,})/,
+            /youtube\.com\/embed\/([A-Za-z0-9_-]{6,})/
+        ];
+        for (const pattern of patterns) {
+            const match = value.match(pattern);
+            if (match) return match[1];
+        }
+        return null;
+    }
+
+    function renderPublicBlock(block) {
+        if (block.type === "text") {
+            return `<div class="tutorial-public-block tutorial-text">${sanitizeRichHtml(block.html || "")}</div>`;
+        }
+        if (block.type === "image" && String(block.data || "").startsWith("data:image/")) {
+            return `<div class="tutorial-public-block"><img class="tutorial-content-image" src="${escapeHtml(block.data)}" alt="${escapeHtml(block.alt || "Image du tutoriel")}"></div>`;
+        }
+        if (block.type === "video") {
+            const id = youtubeId(block.url);
+            if (!id) return "";
+            return `<div class="tutorial-public-block tutorial-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}" title="Vidéo YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        return "";
+    }
+
+    function renderPublic() {
+        if (!tutorialData.menus.length) {
+            accordion.innerHTML = '<div class="tutorial-empty">Les tutoriels seront ajoutés prochainement.</div>';
+            return;
+        }
+        accordion.innerHTML = tutorialData.menus.map(menu => {
+            const isOpen = menu.id === openMenuId;
+            const blocks = menu.blocks.map(renderPublicBlock).join("");
+            return `<section class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${escapeHtml(menu.id)}">
+                <button type="button" class="tutorial-menu-header" data-action="toggle-menu" data-menu-id="${escapeHtml(menu.id)}" aria-expanded="${isOpen ? "true" : "false"}">
+                    <span>${escapeHtml(menu.title)}</span><span class="tutorial-menu-arrow">›</span>
+                </button>
+                <div class="tutorial-menu-panel">${blocks}</div>
+            </section>`;
+        }).join("");
+        bindAccordionEvents();
+    }
+
+    function renderAdminBlock(menu, block) {
+        const remove = `<button type="button" class="tutorial-block-remove" data-action="remove-block" data-menu-id="${menu.id}" data-block-id="${block.id}" title="Supprimer ce contenu">×</button>`;
+        if (block.type === "text") {
+            return `<div class="tutorial-admin-block" data-block-id="${block.id}">
+                ${remove}
+                <div class="tutorial-editor-toolbar" data-editor-id="editor_${block.id}">
+                    <button type="button" data-command="bold"><strong>G</strong></button>
+                    <button type="button" data-command="italic"><em>I</em></button>
+                    <button type="button" data-command="underline"><u>S</u></button>
+                    <select data-command="fontSize" title="Taille de la police">
+                        <option value="3">16 px</option><option value="2">13 px</option><option value="4">18 px</option><option value="5">24 px</option><option value="6">32 px</option><option value="7">40 px</option>
+                    </select>
+                    <button type="button" data-command="justifyLeft">↤</button>
+                    <button type="button" data-command="justifyCenter">↔</button>
+                    <button type="button" data-command="justifyRight">↦</button>
+                    <button type="button" data-action="toggle-emoji" data-editor-id="editor_${block.id}">Emoji</button>
+                </div>
+                <div id="editor_${block.id}" class="tutorial-editor" contenteditable="true" data-menu-id="${menu.id}" data-block-id="${block.id}">${sanitizeRichHtml(block.html || "")}</div>
+                <div class="tutorial-emoji-picker" data-emoji-picker-for="editor_${block.id}" hidden></div>
+            </div>`;
+        }
+        if (block.type === "image") {
+            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${remove}<img class="tutorial-admin-image-preview" src="${escapeHtml(block.data || "")}" alt="Aperçu de l'image"></div>`;
+        }
+        if (block.type === "video") {
+            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${remove}<div class="tutorial-admin-video-preview">Vidéo YouTube : ${escapeHtml(block.url || "")}</div></div>`;
+        }
+        return "";
+    }
+
+    function renderAdmin() {
+        if (!tutorialData.menus.length) {
+            accordion.innerHTML = '<div class="tutorial-empty">Aucun menu déroulant. Utilise « Créer un menu déroulant » pour commencer.</div>';
+            return;
+        }
+        accordion.innerHTML = tutorialData.menus.map(menu => {
+            const isOpen = menu.id === openMenuId;
+            const blocks = menu.blocks.map(block => renderAdminBlock(menu, block)).join("");
+            return `<section class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${menu.id}">
+                <button type="button" class="tutorial-menu-header" data-action="toggle-menu" data-menu-id="${menu.id}" aria-expanded="${isOpen ? "true" : "false"}">
+                    <span>${escapeHtml(menu.title || "Menu sans titre")}</span><span class="tutorial-menu-arrow">›</span>
+                </button>
+                <div class="tutorial-menu-panel">
+                    <input class="tutorial-title-input" type="text" maxlength="140" placeholder="Titre du menu déroulant" value="${escapeHtml(menu.title)}" data-action="menu-title" data-menu-id="${menu.id}">
+                    <div class="tutorial-add-blocks">
+                        <button type="button" data-action="add-text" data-menu-id="${menu.id}">Texte</button>
+                        <button type="button" data-action="add-image" data-menu-id="${menu.id}">Image</button>
+                        <button type="button" data-action="add-video" data-menu-id="${menu.id}">Vidéo</button>
+                    </div>
+                    <input type="file" accept="image/*" data-image-input-for="${menu.id}" hidden>
+                    ${blocks}
+                </div>
+            </section>`;
+        }).join("");
+        bindAccordionEvents();
+        bindAdminEvents();
+    }
+
+    function render() {
+        if (adminMode) renderAdmin();
+        else renderPublic();
+    }
+
+    function bindAccordionEvents() {
+        accordion.querySelectorAll('[data-action="toggle-menu"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const id = button.dataset.menuId;
+                openMenuId = openMenuId === id ? null : id;
+                render();
+            });
+        });
+    }
+
+    function findMenu(menuId) {
+        return tutorialData.menus.find(menu => menu.id === menuId);
+    }
+
+    function findBlock(menu, blockId) {
+        return menu ? menu.blocks.find(block => block.id === blockId) : null;
+    }
+
+    function markDirty() {
+        setStatus(dataChanged() ? "Modifications non enregistrées." : "", "");
+    }
+
+    function bindAdminEvents() {
+        accordion.querySelectorAll('[data-action="menu-title"]').forEach(input => {
+            input.addEventListener("input", () => {
+                const menu = findMenu(input.dataset.menuId);
+                if (menu) menu.title = input.value;
+                const header = input.closest(".tutorial-menu").querySelector(".tutorial-menu-header span:first-child");
+                if (header) header.textContent = input.value || "Menu sans titre";
+                markDirty();
+            });
+        });
+
+        accordion.querySelectorAll('[data-action="add-text"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const menu = findMenu(button.dataset.menuId);
+                if (!menu) return;
+                menu.blocks.push({ id: uid("text"), type: "text", html: "" });
+                openMenuId = menu.id;
+                renderAdmin();
+                markDirty();
+            });
+        });
+
+        accordion.querySelectorAll('[data-action="add-image"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const input = accordion.querySelector(`[data-image-input-for="${CSS.escape(button.dataset.menuId)}"]`);
+                if (input) input.click();
+            });
+        });
+
+        accordion.querySelectorAll('[data-image-input-for]').forEach(input => {
+            input.addEventListener("change", async () => {
+                const file = input.files && input.files[0];
+                if (!file) return;
+                try {
+                    setStatus("Préparation de l'image…", "");
+                    const data = await compressImage(file, 1600, 1600, .88);
+                    const menu = findMenu(input.dataset.imageInputFor);
+                    if (!menu) return;
+                    menu.blocks.push({ id: uid("image"), type: "image", data, alt: file.name || "Image du tutoriel" });
+                    openMenuId = menu.id;
+                    renderAdmin();
+                    markDirty();
+                } catch (error) {
+                    setStatus("Impossible d'importer cette image.", "error");
+                }
+                input.value = "";
+            });
+        });
+
+        accordion.querySelectorAll('[data-action="add-video"]').forEach(button => {
+            button.addEventListener("click", () => openVideoModal(button.dataset.menuId));
+        });
+
+        accordion.querySelectorAll('[data-action="remove-block"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const menu = findMenu(button.dataset.menuId);
+                if (!menu) return;
+                menu.blocks = menu.blocks.filter(block => block.id !== button.dataset.blockId);
+                renderAdmin();
+                markDirty();
+            });
+        });
+
+        accordion.querySelectorAll(".tutorial-editor").forEach(editor => {
+            editor.addEventListener("focus", () => { activeEditor = editor; });
+            editor.addEventListener("input", () => {
+                const menu = findMenu(editor.dataset.menuId);
+                const block = findBlock(menu, editor.dataset.blockId);
+                if (block) block.html = editor.innerHTML;
+                markDirty();
+            });
+        });
+
+        accordion.querySelectorAll(".tutorial-editor-toolbar").forEach(toolbar => {
+            toolbar.querySelectorAll("button[data-command]").forEach(button => {
+                button.addEventListener("mousedown", event => event.preventDefault());
+                button.addEventListener("click", () => {
+                    const editor = document.getElementById(toolbar.dataset.editorId);
+                    if (!editor) return;
+                    editor.focus();
+                    document.execCommand("styleWithCSS", false, true);
+                    document.execCommand(button.dataset.command, false, null);
+                    syncEditor(editor);
+                });
+            });
+            const size = toolbar.querySelector('select[data-command="fontSize"]');
+            if (size) size.addEventListener("change", () => {
+                const editor = document.getElementById(toolbar.dataset.editorId);
+                if (!editor) return;
+                editor.focus();
+                document.execCommand("styleWithCSS", false, true);
+                document.execCommand("fontSize", false, size.value);
+                syncEditor(editor);
+            });
+        });
+
+        accordion.querySelectorAll('[data-action="toggle-emoji"]').forEach(button => {
+            button.addEventListener("mousedown", event => event.preventDefault());
+            button.addEventListener("click", () => {
+                const picker = accordion.querySelector(`[data-emoji-picker-for="${CSS.escape(button.dataset.editorId)}"]`);
+                if (!picker) return;
+                const willOpen = picker.hidden;
+                accordion.querySelectorAll(".tutorial-emoji-picker").forEach(p => p.hidden = true);
+                if (willOpen) {
+                    renderEmojiPicker(picker, button.dataset.editorId);
+                    picker.hidden = false;
+                }
+            });
+        });
+    }
+
+    function syncEditor(editor) {
+        const menu = findMenu(editor.dataset.menuId);
+        const block = findBlock(menu, editor.dataset.blockId);
+        if (block) block.html = editor.innerHTML;
+        markDirty();
+    }
+
+    function renderEmojiPicker(picker, editorId) {
+        const nativeButtons = builtinEmojis.map(emoji => `<button type="button" class="tutorial-emoji-button" data-native-emoji="${escapeHtml(emoji)}">${emoji}</button>`).join("");
+        const customButtons = tutorialData.customEmojis.map(emoji => `<button type="button" class="tutorial-emoji-button" data-custom-emoji-id="${escapeHtml(emoji.id)}" title="${escapeHtml(emoji.name || "Emoji personnalisé")}"><img src="${escapeHtml(emoji.data)}" alt=""></button>`).join("");
+        picker.innerHTML = nativeButtons + customButtons + `<button type="button" class="tutorial-emoji-button tutorial-emoji-import" data-action="import-emoji">+ Ajouter un emoji</button><input type="file" accept="image/*" data-emoji-file hidden>`;
+
+        picker.querySelectorAll("[data-native-emoji]").forEach(button => {
+            button.addEventListener("mousedown", event => event.preventDefault());
+            button.addEventListener("click", () => insertEmoji(editorId, button.dataset.nativeEmoji, false));
+        });
+        picker.querySelectorAll("[data-custom-emoji-id]").forEach(button => {
+            button.addEventListener("mousedown", event => event.preventDefault());
+            button.addEventListener("click", () => {
+                const emoji = tutorialData.customEmojis.find(item => item.id === button.dataset.customEmojiId);
+                if (emoji) insertEmoji(editorId, emoji, true);
+            });
+        });
+        const importButton = picker.querySelector('[data-action="import-emoji"]');
+        const fileInput = picker.querySelector("[data-emoji-file]");
+        importButton.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", async () => {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+            try {
+                const data = await compressImage(file, 128, 128, .92);
+                tutorialData.customEmojis.push({ id: uid("emoji"), name: file.name || "Emoji personnalisé", data });
+                renderEmojiPicker(picker, editorId);
+                markDirty();
+            } catch (error) {
+                setStatus("Impossible d'importer cet emoji.", "error");
+            }
+        });
+    }
+
+    function insertEmoji(editorId, emoji, custom) {
+        const editor = document.getElementById(editorId);
+        if (!editor) return;
+        editor.focus();
+        if (custom) {
+            const htmlCode = `<img class="tutorial-inline-emoji" src="${emoji.data}" alt="${escapeHtml(emoji.name || "emoji")}">`;
+            document.execCommand("insertHTML", false, htmlCode);
+        } else {
+            document.execCommand("insertText", false, emoji);
+        }
+        syncEditor(editor);
+    }
+
+    async function compressImage(file, maxWidth, maxHeight, quality) {
+        if (!file.type.startsWith("image/")) throw new Error("Ce fichier n'est pas une image.");
+        const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+        const image = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = dataUrl;
+        });
+        const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        return canvas.toDataURL("image/webp", quality);
+    }
+
+    function openPasswordModal() {
+        settingsPopover.hidden = true;
+        passwordError.textContent = "";
+        passwordInput.value = "";
+        passwordModal.hidden = false;
+        setTimeout(() => passwordInput.focus(), 20);
+    }
+
+    function closePasswordModal() {
+        passwordModal.hidden = true;
+        passwordInput.value = "";
+        passwordError.textContent = "";
+    }
+
+    function base64ToBytes(value) {
+        const binary = atob(value);
+        return Uint8Array.from(binary, char => char.charCodeAt(0));
+    }
+
+    async function decryptAdminToken(password) {
+        const config = window.LEGODINGO13_ADMIN_CONFIG;
+        if (!config || !config.ciphertext || !config.salt || !config.iv) {
+            throw new Error("CONFIG_ABSENTE");
+        }
+        const encoder = new TextEncoder();
+        const material = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+        const key = await crypto.subtle.deriveKey(
+            { name: "PBKDF2", salt: base64ToBytes(config.salt), iterations: Number(config.iterations || 310000), hash: "SHA-256" },
+            material,
+            { name: "AES-GCM", length: 256 },
+            false,
+            ["decrypt"]
+        );
+        const clear = await crypto.subtle.decrypt({ name: "AES-GCM", iv: base64ToBytes(config.iv) }, key, base64ToBytes(config.ciphertext));
+        return new TextDecoder().decode(clear).trim();
+    }
+
+    async function validatePassword() {
+        const password = passwordInput.value;
+        passwordError.textContent = "";
+        if (!password) {
+            passwordError.textContent = "Entre le mot de passe.";
+            return;
+        }
+        passwordValidate.disabled = true;
+        passwordValidate.textContent = "Vérification…";
+        try {
+            const token = await decryptAdminToken(password);
+            if (!(token.startsWith("github_pat_") || token.startsWith("ghp_"))) throw new Error("TOKEN_INVALIDE");
+            adminToken = token;
+            adminMode = true;
+            openMenuId = tutorialData.menus[0]?.id || null;
+            adminToolbar.hidden = false;
+            settingsButton.hidden = true;
+            settingsPopover.hidden = true;
+            closePasswordModal();
+            setStatus("Vue gestion activée.", "success");
+            renderAdmin();
+        } catch (error) {
+            if (String(error.message) === "CONFIG_ABSENTE") {
+                passwordError.textContent = "La configuration administrateur n'est pas encore installée sur le site.";
+            } else {
+                passwordError.textContent = "Mot de passe incorrect.";
+            }
+        } finally {
+            passwordValidate.disabled = false;
+            passwordValidate.textContent = "Valider";
+        }
+    }
+
+    function openConfirm(title, message, acceptLabel, callback) {
+        confirmTitle.textContent = title;
+        confirmText.textContent = message;
+        confirmAccept.textContent = acceptLabel || "Valider";
+        confirmCallback = callback;
+        confirmModal.hidden = false;
+    }
+    function closeConfirm() {
+        confirmModal.hidden = true;
+        confirmCallback = null;
+    }
+
+    function createMenuRequest() {
+        openConfirm("Créer un menu déroulant", "Confirmer la création d'un nouveau menu déroulant ?", "Créer", () => {
+            const menu = { id: uid("menu"), title: "", blocks: [] };
+            tutorialData.menus.push(menu);
+            openMenuId = menu.id;
+            closeConfirm();
+            renderAdmin();
+            markDirty();
+            const input = accordion.querySelector(`[data-action="menu-title"][data-menu-id="${CSS.escape(menu.id)}"]`);
+            if (input) input.focus();
+        });
+    }
+
+    function deleteMenuRequest() {
+        if (!openMenuId) {
+            setStatus("Ouvre d'abord le menu déroulant à supprimer.", "error");
+            return;
+        }
+        const menu = findMenu(openMenuId);
+        if (!menu) return;
+        openConfirm("Supprimer un menu déroulant", `Supprimer « ${menu.title || "Menu sans titre"} » ? Cette action ne sera définitive qu'après l'enregistrement.`, "Supprimer", () => {
+            tutorialData.menus = tutorialData.menus.filter(item => item.id !== menu.id);
+            openMenuId = tutorialData.menus[0]?.id || null;
+            closeConfirm();
+            renderAdmin();
+            markDirty();
+        });
+    }
+
+    function openVideoModal(menuId) {
+        videoTargetMenuId = menuId;
+        videoUrlInput.value = "";
+        videoError.textContent = "";
+        videoModal.hidden = false;
+        setTimeout(() => videoUrlInput.focus(), 20);
+    }
+    function closeVideoModal() {
+        videoModal.hidden = true;
+        videoTargetMenuId = null;
+        videoError.textContent = "";
+    }
+    function addVideoFromModal() {
+        const id = youtubeId(videoUrlInput.value);
+        if (!id) {
+            videoError.textContent = "Entre un lien YouTube valide.";
+            return;
+        }
+        const menu = findMenu(videoTargetMenuId);
+        if (!menu) return closeVideoModal();
+        menu.blocks.push({ id: uid("video"), type: "video", url: videoUrlInput.value.trim() });
+        openMenuId = menu.id;
+        closeVideoModal();
+        renderAdmin();
+        markDirty();
+    }
+
+    function bytesToBase64(bytes) {
+        let binary = "";
+        const chunk = 0x8000;
+        for (let i = 0; i < bytes.length; i += chunk) {
+            binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+        }
+        return btoa(binary);
+    }
+
+    function utf8ToBase64(value) {
+        return bytesToBase64(new TextEncoder().encode(value));
+    }
+
+    async function githubRequest(url, options = {}) {
+        const headers = Object.assign({
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${adminToken}`,
+            "X-GitHub-Api-Version": "2022-11-28"
+        }, options.headers || {});
+        const response = await fetch(url, Object.assign({}, options, { headers }));
+        if (!response.ok) {
+            const details = await response.text();
+            throw new Error(`GitHub ${response.status}: ${details}`);
+        }
+        return response.status === 204 ? null : response.json();
+    }
+
+    function validateBeforeSave() {
+        for (const menu of tutorialData.menus) {
+            if (!String(menu.title || "").trim()) {
+                openMenuId = menu.id;
+                renderAdmin();
+                setStatus("Impossible d'enregistrer : chaque menu déroulant doit avoir un titre.", "error");
+                const input = accordion.querySelector(`[data-action="menu-title"][data-menu-id="${CSS.escape(menu.id)}"]`);
+                if (input) input.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    async function savePage() {
+        if (!adminToken || !validateBeforeSave()) return;
+        setStatus("Enregistrement sur GitHub…", "");
+        const saveButton = document.getElementById("tutorialSavePage");
+        if (saveButton) saveButton.disabled = true;
+        try {
+            let sha = null;
+            try {
+                const current = await githubRequest(API_URL + "?ref=" + encodeURIComponent(REPO_BRANCH));
+                sha = current.sha;
+            } catch (error) {
+                if (!String(error.message).includes("GitHub 404")) throw error;
+            }
+            const cleanData = deepClone(tutorialData);
+            cleanData.updatedAt = new Date().toISOString();
+            const payload = {
+                message: "Mise à jour de la page Tutoriels de jeu",
+                content: utf8ToBase64(JSON.stringify(cleanData, null, 2)),
+                branch: REPO_BRANCH
+            };
+            if (sha) payload.sha = sha;
+            await githubRequest(API_URL, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            tutorialData = cleanData;
+            savedDataSnapshot = JSON.stringify(tutorialData);
+            setStatus("Modifications enregistrées. GitHub republiera automatiquement le site dans quelques instants.", "success");
+        } catch (error) {
+            console.error(error);
+            setStatus("Échec de l'enregistrement sur GitHub. Vérifie le token et sa permission Contents: Read and write.", "error");
+        } finally {
+            if (saveButton) saveButton.disabled = false;
+        }
+    }
+
+    function quitAdmin() {
+        const doQuit = () => {
+            adminMode = false;
+            adminToken = null;
+            adminToolbar.hidden = true;
+            settingsButton.hidden = false;
+            openMenuId = null;
+            tutorialData = normalizeData(JSON.parse(savedDataSnapshot || '{"version":1,"menus":[],"customEmojis":[]}'));
+            setStatus("", "");
+            renderPublic();
+        };
+        if (dataChanged()) {
+            openConfirm("Quitter la vue gestion", "Des modifications ne sont pas enregistrées. Quitter quand même ?", "Quitter", () => { closeConfirm(); doQuit(); });
+        } else {
+            doQuit();
+        }
+    }
+
+    settingsButton.addEventListener("click", () => { settingsPopover.hidden = !settingsPopover.hidden; });
+    editPageButton.addEventListener("click", openPasswordModal);
+    passwordValidate.addEventListener("click", validatePassword);
+    passwordInput.addEventListener("keydown", event => { if (event.key === "Enter") validatePassword(); });
+    document.querySelectorAll('[data-close-password]').forEach(button => button.addEventListener("click", closePasswordModal));
+
+    document.getElementById("tutorialCreateMenu").addEventListener("click", createMenuRequest);
+    document.getElementById("tutorialDeleteMenu").addEventListener("click", deleteMenuRequest);
+    document.getElementById("tutorialSavePage").addEventListener("click", savePage);
+    document.getElementById("tutorialQuitAdmin").addEventListener("click", quitAdmin);
+
+    confirmAccept.addEventListener("click", () => { if (confirmCallback) confirmCallback(); });
+    confirmCancel.addEventListener("click", closeConfirm);
+    document.querySelectorAll('[data-close-confirm]').forEach(button => button.addEventListener("click", closeConfirm));
+
+    videoAddButton.addEventListener("click", addVideoFromModal);
+    videoUrlInput.addEventListener("keydown", event => { if (event.key === "Enter") addVideoFromModal(); });
+    document.querySelectorAll('[data-close-video]').forEach(button => button.addEventListener("click", closeVideoModal));
+
+    document.addEventListener("click", event => {
+        if (!settingsPopover.hidden && !settingsPopover.contains(event.target) && event.target !== settingsButton) {
+            settingsPopover.hidden = true;
+        }
+    });
+
+    loadTutorialData();
+})();
+</script>'''
+
+
 # =========================================================
 # GÉNÉRATION DES PAGES
 # =========================================================
@@ -557,6 +1706,7 @@ def navigation(active):
         ("Discord", "discord.html", "discord"),
         ("YouTube", "youtube.html", "youtube"),
         ("Profil Legodingo13", "profil.html", "profil"),
+        ("Tutoriels de jeu", "tutoriels.html", "tutoriels"),
     ]
 
     parts = []
@@ -796,7 +1946,7 @@ de la communauté francophone de Forge of Empires !
 <a class="primary-button" href="https://discord.gg/{DISCORD_INVITE}" target="_blank" rel="noopener noreferrer">Rejoindre le serveur Discord</a>
 <img src="discord_presentation_2.png" class="discord-presentation-image" alt="Présentation des différentes parties du serveur Discord Legodingo13">
 <div class="grid">
-    <a class="tile" href="{YOUTUBE_URL}" target="_blank" rel="noopener noreferrer"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Chaîne YouTube Legodingo13</div></a>
+    <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Accéder à la page YouTube du site</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
     <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">guns.lol</div><div class="tile-detail">Accéder à la page de Legodingo13</div></a>
 </div>
@@ -832,6 +1982,85 @@ shell(
     f"YouTube Legodingo13 - {youtube_display}",
     f"Chaîne YouTube officielle Legodingo13 avec {youtube_display}.",
     youtube_body,
+)
+
+
+
+# TUTORIELS DE JEU
+# Le contenu est lu depuis tutoriels-data.json dans le navigateur.
+tutoriels_body = f"""
+<h1>Tutoriels de jeu</h1>
+<p class="tutorial-page-intro">
+Retrouve ici les tutoriels et guides de jeu publiés par Legodingo13.
+</p>
+
+<div id="tutorialAdminToolbar" class="tutorial-admin-toolbar" hidden>
+    <button id="tutorialCreateMenu" type="button">Créer un menu déroulant</button>
+    <button id="tutorialDeleteMenu" type="button">Supprimer un menu déroulant</button>
+    <button id="tutorialSavePage" class="tutorial-save-button" type="button">Enregistrer les modifications de la page</button>
+    <button id="tutorialQuitAdmin" type="button">Quitter la vue gestion de la page</button>
+    <div id="tutorialAdminStatus" class="tutorial-admin-status"></div>
+</div>
+
+<div id="tutorialAccordion" class="tutorial-accordion">
+    <div class="tutorial-empty">Chargement des tutoriels…</div>
+</div>
+
+<div class="tutorial-settings-wrap">
+    <button id="tutorialSettingsButton" class="tutorial-settings-button" type="button" aria-label="Paramètres de la page" title="Paramètres">⚙</button>
+    <div id="tutorialSettingsPopover" class="tutorial-settings-popover" hidden>
+        <button id="tutorialEditPageButton" type="button">Modifier la page</button>
+    </div>
+</div>
+
+<div id="tutorialPasswordModal" class="tutorial-modal-overlay" hidden>
+    <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialPasswordTitle">
+        <button type="button" class="tutorial-modal-close" data-close-password aria-label="Fermer">×</button>
+        <h3 id="tutorialPasswordTitle">Modifier la page</h3>
+        <label for="tutorialPasswordInput">Mot de passe :</label>
+        <input id="tutorialPasswordInput" type="password" autocomplete="current-password">
+        <div id="tutorialPasswordError" class="tutorial-modal-error"></div>
+        <div class="tutorial-modal-actions">
+            <button type="button" data-close-password>Annuler</button>
+            <button id="tutorialPasswordValidate" class="primary" type="button">Valider</button>
+        </div>
+    </div>
+</div>
+
+<div id="tutorialConfirmModal" class="tutorial-modal-overlay" hidden>
+    <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialConfirmTitle">
+        <button type="button" class="tutorial-modal-close" data-close-confirm aria-label="Fermer">×</button>
+        <h3 id="tutorialConfirmTitle">Confirmation</h3>
+        <div id="tutorialConfirmText" class="tutorial-modal-message"></div>
+        <div class="tutorial-modal-actions">
+            <button id="tutorialConfirmCancel" type="button">Annuler</button>
+            <button id="tutorialConfirmAccept" class="primary" type="button">Valider</button>
+        </div>
+    </div>
+</div>
+
+<div id="tutorialVideoModal" class="tutorial-modal-overlay" hidden>
+    <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialVideoTitle">
+        <button type="button" class="tutorial-modal-close" data-close-video aria-label="Fermer">×</button>
+        <h3 id="tutorialVideoTitle">Ajouter une vidéo YouTube</h3>
+        <label for="tutorialVideoUrlInput">Lien YouTube :</label>
+        <input id="tutorialVideoUrlInput" type="url" placeholder="https://www.youtube.com/watch?v=...">
+        <div id="tutorialVideoError" class="tutorial-modal-error"></div>
+        <div class="tutorial-modal-actions">
+            <button type="button" data-close-video>Annuler</button>
+            <button id="tutorialVideoAdd" class="primary" type="button">Ajouter</button>
+        </div>
+    </div>
+</div>
+
+{TUTORIALS_SCRIPT}
+"""
+shell(
+    "tutoriels.html",
+    "tutoriels",
+    "Tutoriels de jeu - Legodingo13",
+    "Tutoriels et guides de jeu publiés par Legodingo13.",
+    tutoriels_body,
 )
 
 
@@ -893,6 +2122,7 @@ sitemap_urls = [
     SITE_BASE + "discord.html",
     SITE_BASE + "youtube.html",
     SITE_BASE + "profil.html",
+    SITE_BASE + "tutoriels.html",
 ]
 
 sitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -922,6 +2152,8 @@ assets = [
     "roi_chute.png",
     "discord_presentation_1.png",
     "discord_presentation_2.png",
+    "tutoriels-data.json",
+    "admin-config.js",
 
     # Logos des sites tiers
     "forgedb.png",
@@ -961,4 +2193,4 @@ with open("last-update.txt", "w", encoding="utf-8") as f:
 
 print(f"Discord : {member_count} membres / {online_count} en ligne")
 print(f"YouTube via SocialCounts : {youtube_subscribers} abonnés")
-print("Pages générées : Accueil, Discord, YouTube, Profil Legodingo13 (tableau Excel), compatibilité tableau.html")
+print("Pages générées : Accueil, Discord, YouTube, Profil Legodingo13, Tutoriels de jeu, compatibilité tableau.html")
