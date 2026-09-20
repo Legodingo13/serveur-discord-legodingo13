@@ -43,6 +43,10 @@ ZOUMA_URL = "https://www.youtube.com/@PassionFoeforgeofempire"
 
 SITE_BASE = "https://legodingo13.github.io/serveur-discord-legodingo13/"
 
+# Compteur de vues public et gratuit (Page Views API)
+PAGEVIEWS_SITE = "legodingo13.github.io"
+PAGEVIEWS_BASE_PATH = "/serveur-discord-legodingo13"
+
 # Nous ajouterons la vraie balise Google Search Console plus tard.
 GOOGLE_META = """<!-- Google Search Console -->"""
 
@@ -372,8 +376,40 @@ h2 { margin: 10px 0 16px; }
 .table-image { display:block; max-width:none; width:auto; min-width:100%; height:auto; margin:0 auto; border-radius:8px; }
 .notice { max-width:760px; margin:22px auto; padding:18px; border-radius:15px; background:rgba(255,212,147,.08); border:1px solid rgba(255,212,147,.20); color:#e6dccd; line-height:1.6; }
 
-.footer { margin: 0 38px; padding: 23px 0 30px; border-top:1px solid rgba(255,255,255,.08); text-align:center; color:#aeb4bf; font-size:13px; }
+.footer {
+    margin: 0 38px;
+    padding: 23px 0 30px;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:#aeb4bf;
+    font-size:13px;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:end;
+    gap:16px;
+}
+.footer-copy { grid-column:2; text-align:center; }
 .footer small { color:#7f8794; }
+.page-view-counter {
+    grid-column:1;
+    justify-self:start;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    min-height:22px;
+    color:#d9dce3;
+    font-size:13px;
+    font-weight:600;
+    line-height:1;
+    opacity:.92;
+}
+.page-view-counter svg {
+    width:18px;
+    height:18px;
+    display:block;
+    fill:currentColor;
+}
+.page-view-number { min-width:1.5em; text-align:left; }
+.footer-spacer { grid-column:3; }
 
 /* =========================================================
    LOGO CLIQUABLE + ROI QUI TOMBE
@@ -937,7 +973,16 @@ h2 { margin: 10px 0 16px; }
     .content { padding:15px 18px 28px; }
     .stats, .grid, .grid.two { grid-template-columns:1fr; gap:15px; }
     .tile { min-height:155px; }
-    .footer { margin:0 18px; }
+    .footer {
+        margin:0 18px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:13px;
+    }
+    .footer-copy { order:1; text-align:center; }
+    .page-view-counter { order:2; align-self:flex-start; }
+    .footer-spacer { display:none; }
 }
 """
 
@@ -1027,6 +1072,56 @@ SCRIPT = r"""
             king.remove();
         };
     });
+})();
+
+(function () {
+    const counter = document.querySelector(".page-view-counter");
+    if (!counter) return;
+
+    const number = counter.querySelector(".page-view-number");
+    const site = counter.dataset.viewSite;
+    const path = counter.dataset.viewPath;
+
+    if (!site || !path || !number) return;
+
+    const base = "https://page-views-api.ratneshc.com/api/v1";
+    const query = `site=${encodeURIComponent(site)}&path=${encodeURIComponent(path)}`;
+
+    async function updateViewCounter() {
+        try {
+            /*
+               Le service déduplique automatiquement un même visiteur pendant
+               30 minutes pour une même page. On compte donc de vraies visites
+               plutôt que chaque simple rafraîchissement du navigateur.
+            */
+            await fetch(`${base}/track?${query}`, {
+                method: "GET",
+                cache: "no-store",
+                keepalive: true
+            });
+
+            const response = await fetch(`${base}/views?${query}`, {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            const views = Number(data.views);
+
+            if (!Number.isFinite(views)) throw new Error("Compteur invalide");
+
+            number.textContent = new Intl.NumberFormat("fr-FR").format(views);
+            counter.title = `${number.textContent} vue${views > 1 ? "s" : ""} de cette page`;
+        } catch (error) {
+            console.warn("Compteur de vues indisponible :", error);
+            number.textContent = "—";
+            counter.title = "Compteur de vues temporairement indisponible";
+        }
+    }
+
+    updateViewCounter();
 })();
 </script>
 """
@@ -1925,6 +2020,11 @@ def navigation(active):
 
 def shell(filename, active, title, description, body):
     canonical = SITE_BASE + ("" if filename == "index.html" else filename)
+    view_path = (
+        PAGEVIEWS_BASE_PATH + "/"
+        if filename == "index.html"
+        else PAGEVIEWS_BASE_PATH + "/" + filename
+    )
     page = f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1963,8 +2063,23 @@ def shell(filename, active, title, description, body):
 </header>
 <div class="content">{body}</div>
 <footer class="footer">
-    Dernière mise à jour automatique : <strong>{updated}</strong><br>
-    <small>Site communautaire Legodingo13 • Forge of Empires</small>
+    <div
+        class="page-view-counter"
+        data-view-site="{PAGEVIEWS_SITE}"
+        data-view-path="{view_path}"
+        aria-label="Nombre de vues de cette page"
+        title="Nombre de vues de cette page"
+    >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 5c-5.5 0-9.6 4.6-10.8 6.2a1.3 1.3 0 0 0 0 1.6C2.4 14.4 6.5 19 12 19s9.6-4.6 10.8-6.2a1.3 1.3 0 0 0 0-1.6C21.6 9.6 17.5 5 12 5Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z"/>
+        </svg>
+        <span class="page-view-number">—</span>
+    </div>
+    <div class="footer-copy">
+        Dernière mise à jour automatique : <strong>{updated}</strong><br>
+        <small>Site communautaire Legodingo13 • Forge of Empires</small>
+    </div>
+    <div class="footer-spacer" aria-hidden="true"></div>
 </footer>
 </section>
 </main>
