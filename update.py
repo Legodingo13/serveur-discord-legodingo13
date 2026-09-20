@@ -725,17 +725,35 @@ h2 { margin: 10px 0 16px; }
     border-radius: 13px;
     background: rgba(255,255,255,.035);
 }
-.tutorial-block-remove {
+.tutorial-block-controls {
     position: absolute;
     top: 7px;
     right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 4;
+}
+.tutorial-block-move,
+.tutorial-block-remove {
     width: 28px;
     height: 28px;
+    padding: 0;
     border-radius: 8px;
     border: 1px solid rgba(255,255,255,.12);
     background: rgba(0,0,0,.28);
     color: #d9dde5;
-    z-index: 4;
+    font-size: 15px;
+    line-height: 1;
+}
+.tutorial-block-move:hover:not(:disabled) {
+    color: #ffffff;
+    border-color: rgba(255,196,108,.42);
+    background: rgba(255,196,108,.10);
+}
+.tutorial-block-move:disabled {
+    opacity: .30;
+    cursor: default !important;
 }
 .tutorial-block-remove:hover { color: #ffaaaa; border-color: rgba(255,120,120,.35); }
 
@@ -743,7 +761,7 @@ h2 { margin: 10px 0 16px; }
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    padding-right: 35px;
+    padding-right: 105px;
     margin-bottom: 9px;
 }
 .tutorial-editor-toolbar button,
@@ -1388,11 +1406,15 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         bindAccordionEvents();
     }
 
-    function renderAdminBlock(menu, block) {
-        const remove = `<button type="button" class="tutorial-block-remove" data-action="remove-block" data-menu-id="${menu.id}" data-block-id="${block.id}" title="Supprimer ce contenu">×</button>`;
+    function renderAdminBlock(menu, block, blockIndex) {
+        const controls = `<div class="tutorial-block-controls">
+            <button type="button" class="tutorial-block-move" data-action="move-block-up" data-menu-id="${menu.id}" data-block-id="${block.id}" title="Monter cet élément" aria-label="Monter cet élément" ${blockIndex === 0 ? "disabled" : ""}>↑</button>
+            <button type="button" class="tutorial-block-move" data-action="move-block-down" data-menu-id="${menu.id}" data-block-id="${block.id}" title="Descendre cet élément" aria-label="Descendre cet élément" ${blockIndex === menu.blocks.length - 1 ? "disabled" : ""}>↓</button>
+            <button type="button" class="tutorial-block-remove" data-action="remove-block" data-menu-id="${menu.id}" data-block-id="${block.id}" title="Supprimer ce contenu" aria-label="Supprimer cet élément">×</button>
+        </div>`;
         if (block.type === "text") {
             return `<div class="tutorial-admin-block" data-block-id="${block.id}">
-                ${remove}
+                ${controls}
                 <div class="tutorial-editor-toolbar" data-editor-id="editor_${block.id}">
                     <button type="button" data-command="bold"><strong>G</strong></button>
                     <button type="button" data-command="italic"><em>I</em></button>
@@ -1410,10 +1432,10 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
             </div>`;
         }
         if (block.type === "image") {
-            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${remove}<img class="tutorial-admin-image-preview" src="${escapeHtml(block.data || "")}" alt="Aperçu de l'image"></div>`;
+            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${controls}<img class="tutorial-admin-image-preview" src="${escapeHtml(block.data || "")}" alt="Aperçu de l'image"></div>`;
         }
         if (block.type === "video") {
-            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${remove}<div class="tutorial-admin-video-preview">Vidéo YouTube : ${escapeHtml(block.url || "")}</div></div>`;
+            return `<div class="tutorial-admin-block" data-block-id="${block.id}">${controls}<div class="tutorial-admin-video-preview">Vidéo YouTube : ${escapeHtml(block.url || "")}</div></div>`;
         }
         return "";
     }
@@ -1425,7 +1447,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         }
         accordion.innerHTML = tutorialData.menus.map(menu => {
             const isOpen = menu.id === openMenuId;
-            const blocks = menu.blocks.map(block => renderAdminBlock(menu, block)).join("");
+            const blocks = menu.blocks.map((block, blockIndex) => renderAdminBlock(menu, block, blockIndex)).join("");
             return `<section class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${menu.id}">
                 <button type="button" class="tutorial-menu-header" data-action="toggle-menu" data-menu-id="${menu.id}" aria-expanded="${isOpen ? "true" : "false"}">
                     <span>${escapeHtml(menu.title || "Menu sans titre")}</span><span class="tutorial-menu-arrow">›</span>
@@ -1524,6 +1546,25 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
 
         accordion.querySelectorAll('[data-action="add-video"]').forEach(button => {
             button.addEventListener("click", () => openVideoModal(button.dataset.menuId));
+        });
+
+        accordion.querySelectorAll('[data-action="move-block-up"], [data-action="move-block-down"]').forEach(button => {
+            button.addEventListener("click", () => {
+                const menu = findMenu(button.dataset.menuId);
+                if (!menu) return;
+
+                const currentIndex = menu.blocks.findIndex(block => block.id === button.dataset.blockId);
+                if (currentIndex < 0) return;
+
+                const direction = button.dataset.action === "move-block-up" ? -1 : 1;
+                const targetIndex = currentIndex + direction;
+                if (targetIndex < 0 || targetIndex >= menu.blocks.length) return;
+
+                [menu.blocks[currentIndex], menu.blocks[targetIndex]] = [menu.blocks[targetIndex], menu.blocks[currentIndex]];
+                openMenuId = menu.id;
+                renderAdmin();
+                markDirty();
+            });
         });
 
         accordion.querySelectorAll('[data-action="remove-block"]').forEach(button => {
