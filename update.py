@@ -518,6 +518,15 @@ h2 { margin: 10px 0 16px; }
     overflow-wrap: anywhere;
 }
 .tutorial-text p { margin: 0 0 10px; }
+.tutorial-text a.tutorial-link {
+    color: #8eb8ff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+}
+.tutorial-text a.tutorial-link:hover {
+    color: #b9d2ff;
+}
 .tutorial-text img.tutorial-inline-emoji {
     width: 1.25em;
     height: 1.25em;
@@ -1176,6 +1185,66 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         return template.innerHTML;
     }
 
+    function normalizeTutorialLink(urlValue) {
+        try {
+            const parsed = new URL(String(urlValue || "").trim());
+            if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+            return parsed.href;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function linkifyTutorialSyntax(htmlValue) {
+        const template = document.createElement("template");
+        template.innerHTML = sanitizeRichHtml(htmlValue);
+
+        const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+        /*
+           Syntaxe de lien utilisée dans les tutoriels :
+           (Nom du lien)[https://exemple.com/]
+        */
+        const linkPattern = /\(([^()\[\]\n]{1,200})\)\[(https?:\/\/[^\]\s]+)\]/g;
+
+        textNodes.forEach(node => {
+            const value = node.nodeValue || "";
+            linkPattern.lastIndex = 0;
+
+            let match;
+            let lastIndex = 0;
+            let hasLink = false;
+            const fragment = document.createDocumentFragment();
+
+            while ((match = linkPattern.exec(value)) !== null) {
+                const href = normalizeTutorialLink(match[2]);
+                if (!href) continue;
+
+                fragment.appendChild(document.createTextNode(value.slice(lastIndex, match.index)));
+
+                const link = document.createElement("a");
+                link.className = "tutorial-link";
+                link.href = href;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = match[1];
+                fragment.appendChild(link);
+
+                lastIndex = linkPattern.lastIndex;
+                hasLink = true;
+            }
+
+            if (!hasLink) return;
+
+            fragment.appendChild(document.createTextNode(value.slice(lastIndex)));
+            node.replaceWith(fragment);
+        });
+
+        return template.innerHTML;
+    }
+
     function youtubeId(url) {
         const value = String(url || "").trim();
         const patterns = [
@@ -1193,7 +1262,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
 
     function renderPublicBlock(block) {
         if (block.type === "text") {
-            return `<div class="tutorial-public-block tutorial-text">${sanitizeRichHtml(block.html || "")}</div>`;
+            return `<div class="tutorial-public-block tutorial-text">${linkifyTutorialSyntax(block.html || "")}</div>`;
         }
         if (block.type === "image" && String(block.data || "").startsWith("data:image/")) {
             return `<div class="tutorial-public-block"><img class="tutorial-content-image" src="${escapeHtml(block.data)}" alt="${escapeHtml(block.alt || "Image du tutoriel")}"></div>`;
