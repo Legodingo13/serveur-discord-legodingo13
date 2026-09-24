@@ -508,7 +508,9 @@ h2 { margin: 10px 0 16px; }
 }
 
 .tutorial-menu {
+    position: relative;
     border-top: 1px solid rgba(255,255,255,.13);
+    scroll-margin-top: 22px;
 }
 .tutorial-menu:last-child {
     border-bottom: 1px solid rgba(255,255,255,.13);
@@ -531,6 +533,37 @@ h2 { margin: 10px 0 16px; }
 
 .tutorial-menu-header:hover {
     color: #ffd493;
+}
+
+.tutorial-anchor-link {
+    position: absolute;
+    top: 12px;
+    right: 42px;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: #9fa8b7;
+    text-decoration: none;
+    font-size: 16px;
+    opacity: .72;
+    z-index: 2;
+    transition: .18s ease;
+}
+.tutorial-anchor-link:hover,
+.tutorial-anchor-link:focus-visible {
+    color: #ffd493;
+    background: rgba(255,212,147,.08);
+    opacity: 1;
+}
+.tutorial-menu-header { padding-right: 82px; }
+
+.tutorial-menu-updated {
+    margin: 0 0 16px;
+    color: #8f98a7;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 .tutorial-menu-arrow {
@@ -976,6 +1009,42 @@ h2 { margin: 10px 0 16px; }
     font-size: 13px;
 }
 
+
+/* =========================================================
+   PAGE 404
+   ========================================================= */
+.error-page {
+    max-width: 760px;
+    margin: 4px auto 10px;
+    padding: 16px 8px 12px;
+    text-align: center;
+}
+.error-king {
+    display: block;
+    width: min(230px, 56vw);
+    height: auto;
+    margin: 0 auto 8px;
+    filter: drop-shadow(0 15px 28px rgba(0,0,0,.38));
+}
+.error-code {
+    margin: 0;
+    font-size: clamp(76px, 16vw, 145px);
+    line-height: .9;
+    font-weight: 900;
+    letter-spacing: -5px;
+    color: #ffd493;
+    text-shadow: 0 8px 30px rgba(0,0,0,.4);
+}
+.error-page h1 { margin-top: 15px; }
+.error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+.error-actions a { min-width: 180px; }
+
 @media (max-width:760px) {
     .tutorial-menu-header { font-size: 16px; }
     .tutorial-admin-toolbar button { flex: 1 1 calc(50% - 9px); }
@@ -1224,6 +1293,8 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         data.menus.forEach(menu => {
             if (!menu.id) menu.id = uid("menu");
             if (typeof menu.title !== "string") menu.title = "";
+            if (typeof menu.slug !== "string") menu.slug = "";
+            if (typeof menu.updatedAt !== "string") menu.updatedAt = "";
             if (!Array.isArray(menu.blocks)) menu.blocks = [];
             menu.blocks.forEach(block => {
                 if (!block.id) block.id = uid("block");
@@ -1242,7 +1313,12 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
             tutorialData = normalizeData({ version: 1, menus: [], customEmojis: [] });
         }
         savedDataSnapshot = JSON.stringify(tutorialData);
-        render();
+        if (!openTutorialFromHash(false)) render();
+        else requestAnimationFrame(() => {
+            const hash = decodeURIComponent(String(location.hash || "").replace(/^#/, ""));
+            const target = hash ? document.getElementById(hash) : null;
+            if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
+        });
     }
 
     function escapeHtml(value) {
@@ -1375,12 +1451,62 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         return null;
     }
 
+    function slugifyTutorialTitle(value) {
+        const base = String(value || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 72);
+        return base || "tutoriel";
+    }
+
+    function menuAnchor(menu) {
+        if (menu && String(menu.slug || "").trim()) return String(menu.slug).trim();
+        const suffix = String(menu?.id || "menu").replace(/[^a-zA-Z0-9]/g, "").slice(-6).toLowerCase();
+        return slugifyTutorialTitle(menu?.title || "tutoriel") + (suffix ? "-" + suffix : "");
+    }
+
+    function ensureUniqueMenuSlugs(menus) {
+        const used = new Set();
+        (menus || []).forEach(menu => {
+            let slug = String(menu.slug || "").trim();
+            if (!slug) slug = slugifyTutorialTitle(menu.title);
+            let candidate = slug;
+            let index = 2;
+            while (used.has(candidate)) {
+                candidate = slug + "-" + index;
+                index += 1;
+            }
+            menu.slug = candidate;
+            used.add(candidate);
+        });
+    }
+
+    function formatTutorialDate(value) {
+        if (!value) return "";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return new Intl.DateTimeFormat("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }).format(date);
+    }
+
+    function comparableMenu(menu) {
+        const copy = deepClone(menu || {});
+        delete copy.updatedAt;
+        return copy;
+    }
+
     function renderPublicBlock(block) {
         if (block.type === "text") {
             return `<div class="tutorial-public-block tutorial-text">${linkifyTutorialSyntax(block.html || "")}</div>`;
         }
         if (block.type === "image" && String(block.data || "").startsWith("data:image/")) {
-            return `<div class="tutorial-public-block"><img class="tutorial-content-image" src="${escapeHtml(block.data)}" alt="${escapeHtml(block.alt || "Image du tutoriel")}"></div>`;
+            return `<div class="tutorial-public-block"><img class="tutorial-content-image" src="${escapeHtml(block.data)}" alt="${escapeHtml(block.alt || "Image du tutoriel")}" loading="lazy" decoding="async"></div>`;
         }
         if (block.type === "video") {
             const id = youtubeId(block.url);
@@ -1398,14 +1524,19 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         accordion.innerHTML = tutorialData.menus.map(menu => {
             const isOpen = menu.id === openMenuId;
             const blocks = menu.blocks.map(renderPublicBlock).join("");
-            return `<section class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${escapeHtml(menu.id)}">
+            const anchor = menuAnchor(menu);
+            const updatedLabel = formatTutorialDate(menu.updatedAt);
+            const updatedHtml = updatedLabel ? `<div class="tutorial-menu-updated">Dernière mise à jour : ${escapeHtml(updatedLabel)}</div>` : "";
+            return `<section id="${escapeHtml(anchor)}" class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${escapeHtml(menu.id)}">
+                <a class="tutorial-anchor-link" href="#${escapeHtml(anchor)}" title="Lien direct vers ce tutoriel" aria-label="Lien direct vers ${escapeHtml(menu.title)}">🔗</a>
                 <button type="button" class="tutorial-menu-header" data-action="toggle-menu" data-menu-id="${escapeHtml(menu.id)}" aria-expanded="${isOpen ? "true" : "false"}">
                     <span>${escapeHtml(menu.title)}</span><span class="tutorial-menu-arrow">›</span>
                 </button>
-                <div class="tutorial-menu-panel">${blocks}</div>
+                <div class="tutorial-menu-panel">${updatedHtml}${blocks}</div>
             </section>`;
         }).join("");
         bindAccordionEvents();
+        bindAnchorEvents();
     }
 
     function renderAdminBlock(menu, block, blockIndex) {
@@ -1455,6 +1586,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
                     <span>${escapeHtml(menu.title || "Menu sans titre")}</span><span class="tutorial-menu-arrow">›</span>
                 </button>
                 <div class="tutorial-menu-panel">
+                    ${formatTutorialDate(menu.updatedAt) ? `<div class="tutorial-menu-updated">Dernière mise à jour : ${escapeHtml(formatTutorialDate(menu.updatedAt))}</div>` : ""}
                     <input class="tutorial-title-input" type="text" maxlength="140" placeholder="Titre du menu déroulant" value="${escapeHtml(menu.title)}" data-action="menu-title" data-menu-id="${menu.id}">
                     <div class="tutorial-add-blocks">
                         <button type="button" data-action="add-text" data-menu-id="${menu.id}">Texte</button>
@@ -1483,6 +1615,40 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
                 render();
             });
         });
+    }
+
+    function bindAnchorEvents() {
+        accordion.querySelectorAll(".tutorial-anchor-link").forEach(link => {
+            link.addEventListener("click", event => {
+                event.preventDefault();
+                const section = link.closest(".tutorial-menu");
+                if (!section) return;
+                const anchor = section.id;
+                openMenuId = section.dataset.menuId || null;
+                history.pushState(null, "", "#" + encodeURIComponent(anchor));
+                renderPublic();
+                requestAnimationFrame(() => {
+                    const target = document.getElementById(anchor);
+                    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+                });
+            });
+        });
+    }
+
+    function openTutorialFromHash(scroll = true) {
+        const hash = decodeURIComponent(String(location.hash || "").replace(/^#/, ""));
+        if (!hash) return false;
+        const menu = tutorialData.menus.find(item => menuAnchor(item) === hash);
+        if (!menu) return false;
+        openMenuId = menu.id;
+        render();
+        if (scroll) {
+            requestAnimationFrame(() => {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        }
+        return true;
     }
 
     function findMenu(menuId) {
@@ -1532,7 +1698,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
                 if (!file) return;
                 try {
                     setStatus("Préparation de l'image…", "");
-                    const data = await compressImage(file, 1600, 1600, .88);
+                    const data = await compressImage(file, 1600, 1600, .84, 650 * 1024);
                     const menu = findMenu(input.dataset.imageInputFor);
                     if (!menu) return;
                     menu.blocks.push({ id: uid("image"), type: "image", data, alt: file.name || "Image du tutoriel" });
@@ -1657,7 +1823,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
             const file = fileInput.files && fileInput.files[0];
             if (!file) return;
             try {
-                const data = await compressImage(file, 128, 128, .92);
+                const data = await compressImage(file, 128, 128, .88, 55 * 1024);
                 tutorialData.customEmojis.push({ id: uid("emoji"), name: file.name || "Emoji personnalisé", data });
                 renderEmojiPicker(picker, editorId);
                 markDirty();
@@ -1680,29 +1846,57 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         syncEditor(editor);
     }
 
-    async function compressImage(file, maxWidth, maxHeight, quality) {
+    function dataUrlApproxBytes(dataUrl) {
+        const comma = String(dataUrl || "").indexOf(",");
+        const base64 = comma >= 0 ? String(dataUrl).slice(comma + 1) : String(dataUrl || "");
+        return Math.ceil(base64.length * 0.75);
+    }
+
+    async function compressImage(file, maxWidth, maxHeight, quality, targetBytes = 650 * 1024) {
         if (!file.type.startsWith("image/")) throw new Error("Ce fichier n'est pas une image.");
+
         const dataUrl = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result);
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
+
         const image = await new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve(img);
             img.onerror = reject;
             img.src = dataUrl;
         });
-        const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
-        const width = Math.max(1, Math.round(image.width * scale));
-        const height = Math.max(1, Math.round(image.height * scale));
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, width, height);
-        return canvas.toDataURL("image/webp", quality);
+
+        let scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+        let width = Math.max(1, Math.round(image.width * scale));
+        let height = Math.max(1, Math.round(image.height * scale));
+        let currentQuality = Math.min(.9, Math.max(.55, Number(quality || .82)));
+        let result = "";
+
+        for (let attempt = 0; attempt < 9; attempt += 1) {
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(image, 0, 0, width, height);
+            result = canvas.toDataURL("image/webp", currentQuality);
+
+            if (dataUrlApproxBytes(result) <= targetBytes) break;
+
+            if (currentQuality > .62) {
+                currentQuality = Math.max(.60, currentQuality - .07);
+            } else {
+                width = Math.max(640, Math.round(width * .88));
+                height = Math.max(360, Math.round(height * .88));
+                currentQuality = .72;
+            }
+        }
+
+        return result;
     }
 
     function openPasswordModal() {
@@ -1964,7 +2158,24 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
                 if (!String(error.message).includes("GitHub 404")) throw error;
             }
             const cleanData = deepClone(tutorialData);
-            cleanData.updatedAt = new Date().toISOString();
+            const nowIso = new Date().toISOString();
+            ensureUniqueMenuSlugs(cleanData.menus);
+
+            let previousData = { menus: [] };
+            try {
+                previousData = JSON.parse(savedDataSnapshot || '{"menus":[]}');
+            } catch (error) {
+                previousData = { menus: [] };
+            }
+            const previousMenus = new Map((previousData.menus || []).map(menu => [menu.id, menu]));
+
+            cleanData.menus.forEach(menu => {
+                const previous = previousMenus.get(menu.id);
+                const changed = !previous || JSON.stringify(comparableMenu(menu)) !== JSON.stringify(comparableMenu(previous));
+                if (!menu.updatedAt || changed) menu.updatedAt = nowIso;
+            });
+
+            cleanData.updatedAt = nowIso;
             const payload = {
                 message: "Mise à jour de la page Tutoriels de jeu",
                 content: utf8ToBase64(JSON.stringify(cleanData, null, 2)),
@@ -2036,6 +2247,10 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         }
     });
 
+    window.addEventListener("hashchange", () => {
+        if (!adminMode) openTutorialFromHash(true);
+    });
+
     loadTutorialData();
 })();
 </script>'''
@@ -2061,7 +2276,7 @@ def navigation(active):
     return "".join(parts)
 
 
-def shell(filename, active, title, description, body):
+def shell(filename, active, title, description, body, robots="index, follow"):
     canonical = SITE_BASE + ("" if filename == "index.html" else filename)
     view_path = (
         PAGEVIEWS_BASE_PATH + "/"
@@ -2081,7 +2296,7 @@ def shell(filename, active, title, description, body):
 <link rel="apple-touch-icon" href="onglet_logo_optimise.png?v=4">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="{robots}">
 <link rel="canonical" href="{canonical}">
 {GOOGLE_META}
 <style>{CSS}</style>
@@ -2157,12 +2372,12 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
 <p class="section-subtitle">Mes pages, mon serveur et les accès directement liés à la communauté Legodingo13.</p>
 
 <div class="grid">
-    <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
-    <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
-    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu.</div></a>
-    <a class="tile" href="profil.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
-    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Consulter les tutoriels et guides de jeu.</div></a>
-    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
+    <a class="tile" href="discord.html"><img src="logo.png" loading="lazy" decoding="async" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Le plus gros serveur communautaire francophone autour de Forge of Empires.</div></a>
+    <a class="tile" href="youtube.html"><img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
+    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" loading="lazy" decoding="async" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu.</div></a>
+    <a class="tile" href="profil.html"><img src="profil_tableau.png" loading="lazy" decoding="async" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" loading="lazy" decoding="async" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Consulter les tutoriels et guides de jeu.</div></a>
+    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" loading="lazy" decoding="async" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
 </section>
 
@@ -2172,42 +2387,42 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
 
 <div class="grid">
     <a class="tile" href="{FOE_WIKI_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_logo.png" class="tile-logo foe-logo" alt="Wiki Forge of Empires">
+        <img src="foe_logo.png" loading="lazy" decoding="async" class="tile-logo foe-logo" alt="Wiki Forge of Empires">
         <div class="tile-title">Wiki Forge of Empires</div>
         <div class="tile-detail">Wiki francophone consacré à Forge of Empires.</div>
         <div class="external-badge">SITE TIERS</div>
     </a>
 
     <a class="tile" href="{FORGEDB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="forgedb.png" class="tile-logo third-party-logo" alt="ForgeDB">
+        <img src="forgedb.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="ForgeDB">
         <div class="tile-title">ForgeDB</div>
         <div class="tile-detail">Base de données et statistiques autour de Forge of Empires.</div>
         <div class="external-badge">SITE TIERS</div>
     </a>
 
     <a class="tile" href="{FOE_SCOREDB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_scoredb.png" class="tile-logo third-party-logo small" alt="FOE ScoreDB">
+        <img src="foe_scoredb.png" loading="lazy" decoding="async" class="tile-logo third-party-logo small" alt="FOE ScoreDB">
         <div class="tile-title">FOE ScoreDB</div>
         <div class="tile-detail">Base de données et classements Forge of Empires.</div>
         <div class="external-badge">SITE TIERS</div>
     </a>
 
     <a class="tile" href="{FOE_DATA_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_data.png" class="tile-logo third-party-logo" alt="FOE Data">
+        <img src="foe_data.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="FOE Data">
         <div class="tile-title">FOE Data</div>
         <div class="tile-detail">Base de données consacrée à Forge of Empires.</div>
         <div class="external-badge">SITE TIERS</div>
     </a>
 
     <a class="tile" href="{BANANA_DB_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="banana_db.png" class="tile-logo third-party-logo" alt="Born To Be A Banana">
+        <img src="banana_db.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="Born To Be A Banana">
         <div class="tile-title">Born To Be A Banana</div>
         <div class="tile-detail">Base de données consacrée aux bâtiments de Forge of Empires.</div>
         <div class="external-badge">SITE TIERS</div>
     </a>
 
     <a class="tile" href="{FOE_TOOLS_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_tools.png" class="tile-logo third-party-logo" alt="FOE Tools">
+        <img src="foe_tools.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="FOE Tools">
         <div class="tile-title">FOE Tools</div>
         <div class="tile-detail">Assistant pour calculer les places et investissements des Grands Monuments.</div>
         <div class="external-badge">SITE TIERS</div>
@@ -2221,14 +2436,14 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
 
 <div class="grid two">
     <a class="tile" href="{FOE_HAMMER_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_hammer.png" class="tile-logo third-party-logo" alt="FOE Hammer">
+        <img src="foe_hammer.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="FOE Hammer">
         <div class="tile-title">FOE Hammer</div>
         <div class="tile-detail">Extension Chrome pour Forge of Empires.</div>
         <div class="external-badge">EXTENSION TIERCE</div>
     </a>
 
     <a class="tile" href="{FOE_HELPER_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="foe_helper.png" class="tile-logo third-party-logo" alt="FOE Helper">
+        <img src="foe_helper.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="FOE Helper">
         <div class="tile-title">FOE Helper</div>
         <div class="tile-detail">Extension et assistant communautaire pour Forge of Empires.</div>
         <div class="external-badge">EXTENSION TIERCE</div>
@@ -2242,42 +2457,42 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
 
 <div class="grid">
     <a class="tile" href="{UBERNERD14_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="ubernerd14.png" class="tile-logo third-party-logo" alt="UBERnerd14">
+        <img src="ubernerd14.png" loading="lazy" decoding="async" class="tile-logo third-party-logo" alt="UBERnerd14">
         <div class="tile-title">UBERnerd14</div>
         <div class="tile-detail">Le plus gros YouTuber Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
     </a>
 
     <a class="tile" href="{SENSHI_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Senshi">
+        <img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube Senshi">
         <div class="tile-title">Senshi</div>
         <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
     </a>
 
     <a class="tile" href="{PIXELPULSE_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube PixelPulse">
+        <img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube PixelPulse">
         <div class="tile-title">PixelPulse</div>
         <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
     </a>
 
     <a class="tile" href="{MOOINGCAT_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube MooingCatFOE">
+        <img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube MooingCatFOE">
         <div class="tile-title">MooingCatFOE</div>
         <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
     </a>
 
     <a class="tile" href="{GUIGEEKS_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Guigeeks">
+        <img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube Guigeeks">
         <div class="tile-title">Guigeeks</div>
         <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
     </a>
 
     <a class="tile" href="{ZOUMA_URL}" target="_blank" rel="noopener noreferrer">
-        <img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube Zouma">
+        <img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube Zouma">
         <div class="tile-title">Zouma</div>
         <div class="tile-detail">Chaîne YouTube autour de Forge of Empires.</div>
         <div class="external-badge">CHAÎNE TIERCE</div>
@@ -2303,18 +2518,18 @@ Le plus gros serveur communautaire francophone autour de Forge of Empires.
 Rejoins la communauté pour bénéficier des meilleures aides et de la meilleure activité
 de la communauté francophone de Forge of Empires !
 </p>
-<img src="discord_presentation_1.png" class="discord-presentation-image" alt="Présentation visuelle du serveur Discord Legodingo13 - Serv FOE FR">
+<img src="discord_presentation_1.png" class="discord-presentation-image" loading="lazy" decoding="async" alt="Présentation visuelle du serveur Discord Legodingo13 - Serv FOE FR">
 <div class="stats">
     <div class="stat"><span class="number">{member_count}</span><span class="label">membres sur le serveur</span></div>
     <div class="stat"><span class="number">{online_count}</span><span class="label"><span class="online-dot"></span>membres actuellement en ligne</span></div>
 </div>
 <p class="lead">Le serveur Discord de Legodingo13 compte actuellement <strong class="gold">{member_count} membres</strong>, dont environ <strong class="gold">{online_count} membres en ligne</strong>.</p>
 <a class="primary-button" href="https://discord.gg/{DISCORD_INVITE}" target="_blank" rel="noopener noreferrer">Rejoindre le serveur Discord</a>
-<img src="discord_presentation_2.png" class="discord-presentation-image" alt="Présentation des différentes parties du serveur Discord Legodingo13">
+<img src="discord_presentation_2.png" class="discord-presentation-image" loading="lazy" decoding="async" alt="Présentation des différentes parties du serveur Discord Legodingo13">
 <div class="grid">
-    <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Accéder à la page YouTube du site</div></a>
-    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
-    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
+    <a class="tile" href="youtube.html"><img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Accéder à la page YouTube du site</div></a>
+    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" loading="lazy" decoding="async" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" loading="lazy" decoding="async" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
 </div>
 """
 shell(
@@ -2328,7 +2543,7 @@ shell(
 
 # YOUTUBE
 youtube_body = f"""
-<img src="Youtube.png" class="tile-logo youtube-logo" alt="Logo YouTube">
+<img src="Youtube.png" loading="lazy" decoding="async" class="tile-logo youtube-logo" alt="Logo YouTube">
 <h1>Chaîne YouTube Legodingo13</h1>
 <p class="lead">Retrouve la chaîne YouTube officielle de Legodingo13 et les contenus autour de Forge of Empires et de sa communauté.</p>
 <div class="stats">
@@ -2337,9 +2552,9 @@ youtube_body = f"""
 </div>
 <a class="primary-button" href="{YOUTUBE_URL}" target="_blank" rel="noopener noreferrer">Ouvrir la chaîne YouTube</a>
 <div class="grid">
-    <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Accéder à la page du serveur Discord Legodingo13</div></a>
-    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
-    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
+    <a class="tile" href="discord.html"><img src="logo.png" loading="lazy" decoding="async" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Accéder à la page du serveur Discord Legodingo13</div></a>
+    <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" loading="lazy" decoding="async" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" loading="lazy" decoding="async" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
 </div>
 """
 shell(
@@ -2460,7 +2675,7 @@ shell(
 if os.path.exists("tableau.png"):
     profil_tableau_view = """
     <div class="table-frame">
-        <img src="tableau.png" class="table-image" alt="Tableau Excel des mondes Forge of Empires de Legodingo13">
+        <img src="tableau.png" class="table-image" loading="lazy" decoding="async" alt="Tableau Excel des mondes Forge of Empires de Legodingo13">
     </div>
     <a class="primary-button gold-button" href="tableau.png" target="_blank" rel="noopener noreferrer">Ouvrir le tableau en grand</a>
     """
@@ -2473,7 +2688,7 @@ else:
     """
 
 profil_body = f"""
-<img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13">
+<img src="profil_tableau.png" loading="lazy" decoding="async" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13">
 <h1>Profil Legodingo13</h1>
 <p class="lead">
 Tableau Excel des mondes Forge of Empires de Legodingo13. Cette page affiche la dernière
@@ -2499,6 +2714,35 @@ shell(
     "Profil Legodingo13 - Tableau Excel des mondes FOE",
     "Profil Legodingo13 : dernière version du tableau Excel des mondes Forge of Empires.",
     profil_body,
+)
+
+
+# =========================================================
+# PAGE 404 PERSONNALISÉE
+# =========================================================
+
+error_404_body = f"""
+<div class="error-page">
+    <img src="tutoriels_logo.png" class="error-king" alt="Roi Legodingo13 perplexe" decoding="async">
+    <div class="error-code">404</div>
+    <h1>Page introuvable</h1>
+    <p class="lead">
+        Cette page semble s’être perdue à travers les âges…<br>
+        Le roi n’a pas réussi à la retrouver.
+    </p>
+    <div class="error-actions">
+        <a class="primary-button gold-button" href="index.html">Retour à l’accueil</a>
+        <a class="primary-button" href="tutoriels.html">Voir les tutoriels</a>
+    </div>
+</div>
+"""
+shell(
+    "404.html",
+    "",
+    "Page introuvable - Legodingo13",
+    "La page demandée est introuvable sur le site Legodingo13.",
+    error_404_body,
+    robots="noindex, follow",
 )
 
 
