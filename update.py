@@ -2723,16 +2723,14 @@ shell(
 
 error_404_body = f"""
 <div class="error-page">
-    <img src="tutoriels_logo.png" class="error-king" alt="Roi Legodingo13 perplexe" decoding="async">
+    <img src="erreur404_roi.png" class="error-king" alt="Roi Legodingo13 perplexe" decoding="async">
     <div class="error-code">404</div>
     <h1>Page introuvable</h1>
     <p class="lead">
-        Cette page semble s’être perdue à travers les âges…<br>
-        Le roi n’a pas réussi à la retrouver.
+        Cette page semble s’être perdue à travers les âges…
     </p>
     <div class="error-actions">
         <a class="primary-button gold-button" href="index.html">Retour à l’accueil</a>
-        <a class="primary-button" href="tutoriels.html">Voir les tutoriels</a>
     </div>
 </div>
 """
@@ -2786,6 +2784,7 @@ assets = [
     "guns.png",
     "profil_tableau.png",
     "tutoriels_logo.png",
+    "erreur404_roi.png",
     "roi_chute.png",
     "discord_presentation_1.png",
     "discord_presentation_2.png",
