@@ -41,10 +41,11 @@ MOOINGCAT_URL = "https://www.youtube.com/@MooingCatFoE"
 GUIGEEKS_URL = "https://www.youtube.com/@GuigeekX"
 ZOUMA_URL = "https://www.youtube.com/@PassionFoeforgeofempire"
 
-SITE_BASE = "https://legodingo13.github.io/serveur-discord-legodingo13/"
+SITE_BASE = "https://legodingo13.github.io/site-internet-legodingo13/"
 
 # Compteur de vues public et gratuit (Page Views API)
 PAGEVIEWS_SITE = "legodingo13.github.io"
+# Clé historique conservée volontairement pour ne pas remettre les compteurs à zéro après le renommage du dépôt.
 PAGEVIEWS_BASE_PATH = "/serveur-discord-legodingo13"
 
 # Nous ajouterons la vraie balise Google Search Console plus tard.
@@ -320,6 +321,7 @@ h2 { margin: 10px 0 16px; }
 .guns-logo { width:92px; height:92px; }
 .server-logo-small { width:100px; height:auto; }
 .profile-tableau-logo { width:110px; height:110px; object-fit:contain; }
+.tutorials-logo { width:110px; height:110px; object-fit:contain; }
 
 .section-block { margin-top: 44px; }
 .section-block:first-of-type { margin-top: 30px; }
@@ -1150,7 +1152,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
 (function () {
     const DATA_URL = "tutoriels-data.json";
     const REPO_OWNER = "Legodingo13";
-    const REPO_NAME = "serveur-discord-legodingo13";
+    const REPO_NAME = "site-internet-legodingo13";
     const REPO_BRANCH = "main";
     const DATA_PATH = "tutoriels-data.json";
     const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_PATH}`;
@@ -2159,6 +2161,7 @@ Retrouve ici mes liens officiels, puis une sélection de sites, extensions et ch
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-detail">Retrouver la chaîne YouTube de Legodingo13.</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu.</div></a>
     <a class="tile" href="profil.html"><img src="profil_tableau.png" class="tile-logo profile-tableau-logo" alt="Profil Legodingo13 - Tableau Excel des mondes FOE"><div class="tile-title">Profil Legodingo13</div><div class="tile-detail">Tableau Excel des mondes FOE</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Consulter les tutoriels et guides de jeu.</div></a>
     <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13.</div></a>
 </div>
 </section>
@@ -2311,7 +2314,7 @@ de la communauté francophone de Forge of Empires !
 <div class="grid">
     <a class="tile" href="youtube.html"><img src="Youtube.png" class="tile-logo youtube-logo" alt="YouTube"><div class="tile-title">YouTube</div><div class="tile-count">{youtube_display}</div><div class="tile-detail">Accéder à la page YouTube du site</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
-    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">guns.lol</div><div class="tile-detail">Accéder à la page de Legodingo13</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
 </div>
 """
 shell(
@@ -2336,7 +2339,7 @@ youtube_body = f"""
 <div class="grid">
     <a class="tile" href="discord.html"><img src="logo.png" class="tile-logo server-logo-small" alt="Discord Legodingo13"><div class="tile-title">Discord</div><div class="tile-detail">Accéder à la page du serveur Discord Legodingo13</div></a>
     <a class="tile" href="{FOE_URL}" target="_blank" rel="noopener noreferrer"><img src="foe_logo.png" class="tile-logo foe-logo" alt="Forge of Empires"><div class="tile-title">Forge of Empires</div><div class="tile-detail">Accéder au site officiel francophone du jeu</div></a>
-    <a class="tile" href="{GUNS_URL}" target="_blank" rel="noopener noreferrer"><img src="guns.png" class="tile-logo guns-logo" alt="guns.lol Legodingo13"><div class="tile-title">Guns</div><div class="tile-detail">Accéder à la page guns.lol de Legodingo13</div></a>
+    <a class="tile" href="tutoriels.html"><img src="tutoriels_logo.png" class="tile-logo tutorials-logo" alt="Tutoriels de jeu Legodingo13"><div class="tile-title">Tutoriels de jeu</div><div class="tile-detail">Accéder à la page des tutoriels de jeu</div></a>
 </div>
 """
 shell(
@@ -2538,6 +2541,7 @@ assets = [
     "foe_logo.png",
     "guns.png",
     "profil_tableau.png",
+    "tutoriels_logo.png",
     "roi_chute.png",
     "discord_presentation_1.png",
     "discord_presentation_2.png",
