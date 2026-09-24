@@ -557,6 +557,24 @@ h2 { margin: 10px 0 16px; }
     background: rgba(255,212,147,.08);
     opacity: 1;
 }
+
+.tutorial-copy-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    z-index: 10020;
+    max-width: calc(100vw - 32px);
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,212,147,.28);
+    background: rgba(22,23,29,.96);
+    color: #f4f4f6;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+}
 .tutorial-menu-header { padding-right: 82px; }
 
 .tutorial-menu-updated {
@@ -1238,6 +1256,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
     const accordion = document.getElementById("tutorialAccordion");
     const adminToolbar = document.getElementById("tutorialAdminToolbar");
     const adminStatus = document.getElementById("tutorialAdminStatus");
+    const copyToast = document.getElementById("tutorialCopyToast");
     const settingsButton = document.getElementById("tutorialSettingsButton");
     const settingsPopover = document.getElementById("tutorialSettingsPopover");
     const editPageButton = document.getElementById("tutorialEditPageButton");
@@ -1528,7 +1547,7 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
             const updatedLabel = formatTutorialDate(menu.updatedAt);
             const updatedHtml = updatedLabel ? `<div class="tutorial-menu-updated">Dernière mise à jour : ${escapeHtml(updatedLabel)}</div>` : "";
             return `<section id="${escapeHtml(anchor)}" class="tutorial-menu${isOpen ? " open" : ""}" data-menu-id="${escapeHtml(menu.id)}">
-                <a class="tutorial-anchor-link" href="#${escapeHtml(anchor)}" title="Lien direct vers ce tutoriel" aria-label="Lien direct vers ${escapeHtml(menu.title)}">🔗</a>
+                <a class="tutorial-anchor-link" href="#${escapeHtml(anchor)}" title="Copier le lien direct de ce tutoriel" aria-label="Copier le lien direct de ${escapeHtml(menu.title)}">🔗</a>
                 <button type="button" class="tutorial-menu-header" data-action="toggle-menu" data-menu-id="${escapeHtml(menu.id)}" aria-expanded="${isOpen ? "true" : "false"}">
                     <span>${escapeHtml(menu.title)}</span><span class="tutorial-menu-arrow">›</span>
                 </button>
@@ -1617,13 +1636,63 @@ TUTORIALS_SCRIPT = r'''<script src="admin-config.js"></script>
         });
     }
 
+    let copyToastTimer = null;
+
+    function showCopyToast(message) {
+        if (!copyToast) return;
+        if (copyToastTimer) window.clearTimeout(copyToastTimer);
+        copyToast.textContent = message;
+        copyToast.hidden = false;
+        copyToastTimer = window.setTimeout(() => {
+            copyToast.hidden = true;
+        }, 2200);
+    }
+
+    async function copyTextToClipboard(value) {
+        const text = String(value || "");
+        if (!text) return false;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (error) {
+                // On tente ensuite la méthode de secours.
+            }
+        }
+
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        helper.style.pointerEvents = "none";
+        document.body.appendChild(helper);
+        helper.select();
+        helper.setSelectionRange(0, helper.value.length);
+        let copied = false;
+        try {
+            copied = document.execCommand("copy");
+        } catch (error) {
+            copied = false;
+        }
+        helper.remove();
+        return copied;
+    }
+
     function bindAnchorEvents() {
         accordion.querySelectorAll(".tutorial-anchor-link").forEach(link => {
-            link.addEventListener("click", event => {
+            link.addEventListener("click", async event => {
                 event.preventDefault();
                 const section = link.closest(".tutorial-menu");
                 if (!section) return;
                 const anchor = section.id;
+                const directUrl = new URL(window.location.href);
+                directUrl.hash = anchor;
+
+                const copied = await copyTextToClipboard(directUrl.href);
+                showCopyToast(copied ? "Lien du tutoriel copié dans le presse-papiers." : "Impossible de copier automatiquement le lien.");
+
                 openMenuId = section.dataset.menuId || null;
                 history.pushState(null, "", "#" + encodeURIComponent(anchor));
                 renderPublic();
@@ -2587,6 +2656,8 @@ Retrouve ici les tutoriels et guides de jeu publiés par Legodingo13.
 <div id="tutorialAccordion" class="tutorial-accordion">
     <div class="tutorial-empty">Chargement des tutoriels…</div>
 </div>
+
+<div id="tutorialCopyToast" class="tutorial-copy-toast" role="status" aria-live="polite" hidden></div>
 
 <div class="tutorial-settings-wrap">
     <button id="tutorialSettingsButton" class="tutorial-settings-button" type="button" aria-label="Paramètres de la page" title="Paramètres">⚙</button>
